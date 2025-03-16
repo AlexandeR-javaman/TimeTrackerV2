@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Стартовая страница</title>
+</head>
+<body>
+<h1>Добро пожаловать на страницу приложения</h1>
+<h2>Случайное число для теста:</h2>
+<p id="random-number" style="font-size: 32px;">Случайное число:</p>
+
+<script>
+    // Генерируем случайное число от 0 до 100
+    const randomNumber = Math.floor(Math.random() * 101);
+
+    // Выводим случайное число на страницу
+    document.getElementById('random-number').innerText = randomNumber;
+</script>
+</body>
+</html>
