@@ -1,28 +1,28 @@
 spring:
-  application:
-    name: backendApp
+#  application:
+#    name: backendApp
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/TestDBInContainer}
     username: ${USER_DB:postgres1}
     password: ${PASSWORD_DB:postgres1}
     driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: false
+    show-sql: false # Показывать SQL-запросы в логах (опционально)
     hibernate:
-      ddl-auto: none
+      ddl-auto: none # Отключаем автоматическое создание/обновление схемы
   liquibase:
-    enabled: false
-    change-log: db.changelog/db.changelog-master.xml
+    enabled: true # Включаем Liquibase
+    change-log: classpath:db/changelog/db.changelog-master.xml # Указываем путь к главному файлу изменений
 
-logging:
-  level:
-    root: info
-    org.example.backendapp: trace
-#  file:
-#    name: myLogs
-
-server:
-  port: ${PORT:8080}
-
-frontend:
-  url: ${FRONTEND_URL:http://localhost:3000}
+#logging:
+#  level:
+#    root: info
+#    org.example.backendapp: trace
+##  file:
+##    name: myLogs
+#
+#server:
+#  port: ${PORT:8080}
+#
+#frontend:
+#  url: ${FRONTEND_URL:http://localhost:3000}

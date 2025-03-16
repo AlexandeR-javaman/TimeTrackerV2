@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  postgresDb:
+    container_name: PostgresDBContainer
+    image: postgres:17.0-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres1
+      - POSTGRES_PASSWORD=postgres1
+      - POSTGRES_DB=TestDBInContainer
