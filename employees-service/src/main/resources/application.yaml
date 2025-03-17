@@ -7,7 +7,7 @@ spring:
     password: ${PASSWORD_DB:postgres1}
     driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: false # Показывать SQL-запросы в логах (опционально)
+    show-sql: true # Показывать SQL-запросы в логах (опционально)
     hibernate:
       ddl-auto: none # Отключаем автоматическое создание/обновление схемы
   liquibase:
