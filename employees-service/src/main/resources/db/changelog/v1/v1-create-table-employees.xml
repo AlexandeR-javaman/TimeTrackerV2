@@ -19,10 +19,10 @@
             <column name="patronymic" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="stuffId" type="int">
+            <column name="stuff_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="employeePost" type="varchar(255)">
+            <column name="employee_post" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="role" type="varchar(255)">

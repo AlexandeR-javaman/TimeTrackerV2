@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "employees")
+@Access(AccessType.FIELD)
 public class Employees {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +28,10 @@ public class Employees {
     @Column(name = "patronymic", nullable = false)
     private String patronymic;
 
-    @Column(name = "stuffId", nullable = false)
+    @Column(name = "stuff_id", nullable = false)
     private int stuffId;
 
-    @Column(name = "employeePost", nullable = false)
+    @Column(name = "employee_post", nullable = false)
     private String employeePost;
 
     @Column(name = "role", nullable = false)
@@ -40,6 +41,6 @@ public class Employees {
     private String login;
 
     @Column(name = "password", nullable = false)
-    private Integer password;
+    private String password;
 
 }

@@ -12,8 +12,6 @@ public interface EmployeesMapper {
 
     EmployeesDTO entityToDto(Employees employee);
 
-//    @Mapping(target = "id", ignore = true)
-//    Employees dtoToEntity(EmployeesCreateUpdateDTO employeesDto);
 
-    List<EmployeesDTO> employeesListToEmployeeDtoList(List<Employees> employees);
+    List<EmployeesDTO> employeesListToEmployeesDTOList(List<Employees> employees);
 }
