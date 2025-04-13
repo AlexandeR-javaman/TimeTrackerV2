@@ -6,15 +6,28 @@
 </head>
 <body>
 <h1>Добро пожаловать на страницу приложения</h1>
-<h2>Случайное число для теста:</h2>
-<p id="random-number" style="font-size: 32px;">Случайное число:</p>
+<!--<h2>Случайное число для теста:</h2>-->
+<p style="font-size: 32px;">Случайное число для теста: <span id="random-number"></span></p>
+<p style="font-size: 24px;">Страница сгенерирована: <span id="generation-time"></span></p>
 
 <script>
-    // Генерируем случайное число от 0 до 100
+    // Генерация случайного числа
     const randomNumber = Math.floor(Math.random() * 101);
+    document.getElementById('random-number').textContent = randomNumber;
 
-    // Выводим случайное число на страницу
-    document.getElementById('random-number').innerText = randomNumber;
+    // Отображение времени генерации страницы
+    const now = new Date();
+    const timeString = now.toLocaleString('ru-RU', {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    document.getElementById('generation-time').textContent = timeString;
 </script>
+
+<p><a href="http://localhost:8080/employees" style="font-size: 20px;">Перейти к списку сотрудников</a></p>
 </body>
 </html>
