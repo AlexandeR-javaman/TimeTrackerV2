@@ -1,10 +1,10 @@
 package com.example.employees_service.service;
 
-import com.example.employees_service.dto.EmployeeCreateUpdateDTO;
-import com.example.employees_service.dto.EmployeesDTO;
+import com.example.employees_service.dto.EmployeeCreateUpdateDto;
+import com.example.employees_service.dto.EmployeeDto;
 import com.example.employees_service.mapper.EmployeesMapper;
-import com.example.employees_service.model.Employees;
-import com.example.employees_service.repository.EmployeesRepository;
+import com.example.employees_service.model.Employee;
+import com.example.employees_service.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,53 +13,53 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeesServiceImpl implements EmployeesService {
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeesRepository employeesRepository;
+    private final EmployeeRepository employeeRepository;
 
     private final EmployeesMapper employeesMapper;
 
-    public EmployeesServiceImpl(EmployeesRepository employeesRepository, EmployeesMapper employeesMapper) {
-        this.employeesRepository = employeesRepository;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeesMapper employeesMapper) {
+        this.employeeRepository = employeeRepository;
         this.employeesMapper = employeesMapper;
     }
 
     @Override
-    public List<EmployeesDTO> findAll() {
+    public List<EmployeeDto> findAll() {
 //        return employeesMapper.employeesListToEmployeesDTOList(employeesRepository.findAll());
-        return employeesRepository.findAll().stream()
-                .map(employees -> EmployeesDTO.builder()
-                        .id(employees.getId())
-                        .surname(employees.getSurname())
-                        .name(employees.getName())
-                        .patronymic(employees.getPatronymic())
-                        .stuffId(employees.getStuffId())
-                        .employeePost(employees.getEmployeePost())
-                        .role(employees.getRole())
+        return employeeRepository.findAll().stream()
+                .map(employee -> EmployeeDto.builder()
+                        .id(employee.getId())
+                        .surname(employee.getSurname())
+                        .name(employee.getName())
+                        .patronymic(employee.getPatronymic())
+                        .stuffId(employee.getStuffId())
+                        .employeePost(employee.getEmployeePost())
+                        .role(employee.getRole())
                         .date(LocalDate.now())
                         .build())
                 .collect(Collectors.toList());
     }
     @Override
-    public Optional<EmployeesDTO> findById(Long id) {
+    public Optional<EmployeeDto> findById(Long id) {
 //        return employeesRepository.findById(id)       // если надо через маппер
 //                .map(employeesMapper::entityToDto);  // если надо через маппер
-        return employeesRepository.findById(id)
-                .map(employees -> EmployeesDTO.builder()
-                        .id(employees.getId())
-                        .surname(employees.getSurname())
-                        .name(employees.getName())
-                        .patronymic(employees.getPatronymic())
-                        .stuffId(employees.getStuffId())
-                        .employeePost(employees.getEmployeePost())
-                        .role(employees.getRole())
+        return employeeRepository.findById(id)
+                .map(employee -> EmployeeDto.builder()
+                        .id(employee.getId())
+                        .surname(employee.getSurname())
+                        .name(employee.getName())
+                        .patronymic(employee.getPatronymic())
+                        .stuffId(employee.getStuffId())
+                        .employeePost(employee.getEmployeePost())
+                        .role(employee.getRole())
                         .date(LocalDate.now())
                         .build());
     }
     @Override
-    public EmployeesDTO save(EmployeeCreateUpdateDTO createEmployeeDTO) {
+    public EmployeeDto save(EmployeeCreateUpdateDto createEmployeeDTO) {
 //        Employees employee = employeesMapper.dtoToEntity(createEmployeeDTO); // если через маппер, но не будет даты
-        Employees employee = Employees.builder()
+        Employee employee = com.example.employees_service.model.Employee.builder()
                 .surname(createEmployeeDTO.getSurname())
                 .name(createEmployeeDTO.getName())
                 .patronymic(createEmployeeDTO.getPatronymic())
@@ -69,9 +69,9 @@ public class EmployeesServiceImpl implements EmployeesService {
                 .login(createEmployeeDTO.getLogin())
                 .password(createEmployeeDTO.getPassword())
                 .build();
-        Employees savedEmployee = employeesRepository.save(employee);
+        Employee savedEmployee = employeeRepository.save(employee);
 //        return employeesMapper.entityToDto(savedEmployee); // если через маппер, но не будет даты
-        return EmployeesDTO.builder()
+        return EmployeeDto.builder()
                 .id(savedEmployee.getId())
                 .surname(savedEmployee.getSurname())
                 .name(savedEmployee.getName())
@@ -83,8 +83,8 @@ public class EmployeesServiceImpl implements EmployeesService {
                 .build();
     }
     @Override
-    public EmployeesDTO update(EmployeeCreateUpdateDTO employeeDTO, Long id) {
-        return employeesRepository.findById(id)
+    public EmployeeDto update(EmployeeCreateUpdateDto employeeDTO, Long id) {
+        return employeeRepository.findById(id)
                 .map(foundEmployee -> {
                     foundEmployee.setSurname(employeeDTO.getSurname());
                     foundEmployee.setName(employeeDTO.getName());
@@ -94,7 +94,7 @@ public class EmployeesServiceImpl implements EmployeesService {
                     foundEmployee.setRole(employeeDTO.getRole());
                     foundEmployee.setLogin(employeeDTO.getLogin());
                     foundEmployee.setPassword(employeeDTO.getPassword());
-                    Employees updatedEmployee = employeesRepository.save(foundEmployee);
+                    Employee updatedEmployee = employeeRepository.save(foundEmployee);
                     return employeesMapper.entityToDto(updatedEmployee);
                 })
                 .orElse(null);
@@ -102,8 +102,8 @@ public class EmployeesServiceImpl implements EmployeesService {
 
     @Override
     public boolean deleteById(Long id) {
-        if (employeesRepository.existsById(id)) {
-            employeesRepository.deleteById(id);
+        if (employeeRepository.existsById(id)) {
+            employeeRepository.deleteById(id);
             return true;
         }
         return false;

@@ -1,8 +1,8 @@
 package com.example.employees_service.mapper;
 
-import com.example.employees_service.dto.EmployeeCreateUpdateDTO;
-import com.example.employees_service.model.Employees;
-import com.example.employees_service.dto.EmployeesDTO;
+import com.example.employees_service.dto.EmployeeCreateUpdateDto;
+import com.example.employees_service.dto.EmployeeDto;
+import com.example.employees_service.model.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,10 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface EmployeesMapper {
 
-    EmployeesDTO entityToDto(Employees employee);
+    EmployeeDto entityToDto(Employee employee);
 
     @Mapping(target = "id", ignore = true)
-    Employees dtoToEntity(EmployeeCreateUpdateDTO createEmployeeDTO);
+    Employee dtoToEntity(EmployeeCreateUpdateDto createEmployeeDTO);
 
-    List<EmployeesDTO> employeesListToEmployeesDTOList(List<Employees> employees);
+    List<EmployeeDto> employeesListToEmployeesDTOList(List<Employee> employees);
 }

@@ -1,6 +1,5 @@
 package com.example.employees_service.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +11,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeCreateUpdateDTO {
+public class EmployeeDto {
 
- //   private Long id;
+    private Long id;
 
     private String surname;
 
@@ -28,9 +27,9 @@ public class EmployeeCreateUpdateDTO {
 
     private String role;
 
-    private String login;
+//    private String login;
+//
+//    private String password;
 
-    private String password;
-
-//    private LocalDate date;
+    private LocalDate date;
 }

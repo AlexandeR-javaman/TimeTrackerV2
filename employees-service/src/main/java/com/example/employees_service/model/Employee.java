@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "employees")
 @Access(AccessType.FIELD)
-public class Employees {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 

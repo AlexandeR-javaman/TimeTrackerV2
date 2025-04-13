@@ -1,19 +1,18 @@
 package com.example.employees_service.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeesDTO {
-
-    private Long id;
+public class EmployeeCreateUpdateDto {
+// Для update лучше создать отдельный ДТО и в нем сделать несколько методов для апдейта каждого поля
+ //   private Long id;
 
     private String surname;
 
@@ -27,9 +26,9 @@ public class EmployeesDTO {
 
     private String role;
 
-//    private String login;
-//
-//    private String password;
+    private String login;
 
-    private LocalDate date;
+    private String password;
+
+//    private LocalDate date;
 }
