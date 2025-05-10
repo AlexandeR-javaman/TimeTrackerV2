@@ -1,0 +1,5 @@
+﻿surname,name,patronymic,stuffId,employeePost,role,login,password
+Александров,Александр,Александрович,1,Администратор,ROLE_ADMIN,admin,$2a$10$jHwfhz44yz1jwcfKb3yp1OpDfK5Gp5bTdWz9Xkn0E2bXTWQ4aA1Nq
+Иванов,Иван,Иванович,2,Инженер,ROLE_USER,user1,$2a$10$cG9R0RidmmKUyAYGZfgDnuboCtp26nq94AhDjjX6s/PKAtEFQXp72
+Петров,Петр,Петрович,3,Мастер,ROLE_USER,user2,$2a$10$ohpRHUoYKVUg2gN7U/0yculnManUvWSZOuPf4ENIoKpvTIAMr8uSe
+Александров,Иван,Петрович,4,Мастер,ROLE_USER,user3,$2a$10$3wUU0RSwHT3/dx5ZCnVqzOSs3NvvVYJl9mvPHYW4Ao1LOumLsIhBq

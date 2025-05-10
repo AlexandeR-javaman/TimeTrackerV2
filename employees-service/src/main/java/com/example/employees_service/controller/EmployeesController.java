@@ -31,6 +31,12 @@ public class EmployeesController {
         Optional<EmployeeDto> employeeDto = employeeService.findById(id);
         return employeeDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+    // для запросов с параметром
+    // @GetMapping("/byId")  // URL: /api/employees/byId?id=5
+    //public ResponseEntity<EmployeeDto> getById(@RequestParam Long id) { ... }
+    // для запросов с заголовком
+    // @GetMapping("/byId")  // URL: /api/employees/byId
+    //public ResponseEntity<EmployeeDto> getById(@RequestHeader("employee-id") Long id) { ... }
 
     @PostMapping()
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeCreateUpdateDto createEmployeeDTO) {
