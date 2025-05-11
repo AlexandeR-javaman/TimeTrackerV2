@@ -4,10 +4,12 @@ import com.example.logentryservice.LogEntryServiceApplication;
 import com.example.logentryservice.Repository.LogEntryRepository;
 import com.example.logentryservice.dto.LogEntryCreateUpdateDto;
 import com.example.logentryservice.dto.LogEntryDto;
+//import com.example.logentryservice.exception.LogEntryNotFoundException;
 import com.example.logentryservice.model.LogEntry;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,6 +110,23 @@ public class LogEntryServiceImpl implements LogEntryService {
         return false;
     }
 
+    @Override
+    public Long startLogEntry(int employeeId) {
+        LogEntry logEntry = LogEntry.builder()
+                .startTime(LocalDateTime.now())
+                .employeeId(employeeId)
+                .build();
+        LogEntry savedLogEntry = logEntryRepository.save(logEntry);
+        return savedLogEntry.getId();
+    }
+
+    @Override
+    public void endLogEntry(Long logEntryId) {
+        LogEntry logEntry = logEntryRepository.findById(logEntryId)
+                .orElseThrow();// -> new LogEntryNotFoundException("Смена не найдена"));
+        logEntry.setEndTime(LocalDateTime.now());
+        logEntryRepository.save(logEntry);
+    }
 
 
 }

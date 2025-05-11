@@ -11,19 +11,14 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="start_time" type="timestamp">
-                <constraints nullable="false"/>
             </column>
             <column name="end_time" type="timestamp">
-                <constraints nullable="false"/>
             </column>
             <column name="employee_id" type="bigint">
-                <constraints nullable="false"/>
             </column>
             <column name="message" type="varchar(255)">
-                <constraints nullable="false"/>
             </column>
             <column name="job_time" type="float">
-                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>

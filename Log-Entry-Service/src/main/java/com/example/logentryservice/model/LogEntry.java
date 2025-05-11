@@ -23,18 +23,18 @@ public class LogEntry {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
     @Column(name = "employee_id", nullable = false)
     private int employeeId;
 
-    @Column(name = "message", nullable = false)
+    @Column(name = "message")
     private String message;
 
-    @Column(name = "job_time", nullable = false)
+    @Column(name = "job_time")
     private Long jobTime;
 }

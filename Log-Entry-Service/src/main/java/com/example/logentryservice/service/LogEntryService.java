@@ -12,4 +12,8 @@ public interface LogEntryService {
     LogEntryDto save(LogEntryCreateUpdateDto createEmployeeDto);
     LogEntryDto update(LogEntryCreateUpdateDto updateLogEntryDto, Long id);
     boolean deleteById(Long id);
+
+    Long startLogEntry(int employeeId);
+
+    void endLogEntry(Long logEntryId);
 }
