@@ -4,7 +4,7 @@ import com.example.logentryservice.LogEntryServiceApplication;
 import com.example.logentryservice.Repository.LogEntryRepository;
 import com.example.logentryservice.dto.LogEntryCreateUpdateDto;
 import com.example.logentryservice.dto.LogEntryDto;
-//import com.example.logentryservice.exception.LogEntryNotFoundException;
+import com.example.logentryservice.exception.LogEntryNotFoundException;
 import com.example.logentryservice.model.LogEntry;
 import org.springframework.stereotype.Service;
 
@@ -123,7 +123,7 @@ public class LogEntryServiceImpl implements LogEntryService {
     @Override
     public void endLogEntry(Long logEntryId) {
         LogEntry logEntry = logEntryRepository.findById(logEntryId)
-                .orElseThrow();// -> new LogEntryNotFoundException("Смена не найдена"));
+                .orElseThrow(()-> new LogEntryNotFoundException("Смена не найдена"));
         logEntry.setEndTime(LocalDateTime.now());
         logEntryRepository.save(logEntry);
     }
