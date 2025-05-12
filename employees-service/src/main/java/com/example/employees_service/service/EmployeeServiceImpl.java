@@ -59,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto save(EmployeeCreateUpdateDto createEmployeeDTO) {
 //        Employees employee = employeesMapper.dtoToEntity(createEmployeeDTO); // если через маппер, но не будет даты
-        Employee employee = com.example.employees_service.model.Employee.builder()
+        Employee employee = Employee.builder()
                 .surname(createEmployeeDTO.getSurname())
                 .name(createEmployeeDTO.getName())
                 .patronymic(createEmployeeDTO.getPatronymic())
