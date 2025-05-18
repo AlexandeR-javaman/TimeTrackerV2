@@ -1,5 +1,8 @@
 package com.example.logentryservice.dto.request;
 
-public record StartRequest(int employeeId) {
+import jakarta.validation.constraints.*;
 
+public record StartRequest(
+        @Min(value = 1, message = "Поле должно быть более 0")
+        Long employeeId) {
 }

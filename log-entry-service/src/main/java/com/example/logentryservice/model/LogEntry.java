@@ -30,7 +30,7 @@ public class LogEntry {
     private LocalDateTime endTime;
 
     @Column(name = "employee_id", nullable = false)
-    private int employeeId;
+    private Long employeeId;
 
     @Column(name = "message")
     private String message;
