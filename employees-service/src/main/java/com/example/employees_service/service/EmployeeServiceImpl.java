@@ -1,10 +1,11 @@
 package com.example.employees_service.service;
 
-import com.example.employees_service.dto.EmployeeCreateUpdateDto;
-import com.example.employees_service.dto.EmployeeDto;
+import com.example.employees_service.Integration.LogEntryClient;
+import com.example.employees_service.dto.*;
 import com.example.employees_service.mapper.EmployeesMapper;
 import com.example.employees_service.model.Employee;
 import com.example.employees_service.repository.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,16 +14,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
     private final EmployeesMapper employeesMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeesMapper employeesMapper) {
-        this.employeeRepository = employeeRepository;
-        this.employeesMapper = employeesMapper;
-    }
+    private final LogEntryClient logEntryClient;
 
     @Override
     public List<EmployeeDto> findAll() {
@@ -107,5 +106,21 @@ public class EmployeeServiceImpl implements EmployeeService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public EmployeeWithEntryDto getEmployeeWithEntryById(Long id) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        LogEntryDto logEntryDto = logEntryClient.getLogEntryById(id);
+        return EmployeeWithEntryDto.builder()
+                .id(employee.getId())
+                .surname(employee.getSurname())
+                .name(employee.getName())
+                .patronymic(employee.getPatronymic())
+                .stuffId(employee.getStuffId())
+                .employeePost(employee.getEmployeePost())
+                .role(employee.getRole())
+                .logEntries(logEntryDto.logEntryList())
+                .build();
     }
 }

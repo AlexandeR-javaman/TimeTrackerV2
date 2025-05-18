@@ -3,7 +3,9 @@ package com.example.logentryservice.controller;
 import com.example.logentryservice.dto.request.EndRequest;
 import com.example.logentryservice.dto.request.StartRequest;
 import com.example.logentryservice.dto.response.DefaultResponse;
+import com.example.logentryservice.dto.response.GetLogEntryByEmployeeIdResponse;
 import com.example.logentryservice.dto.response.StartResponse;
+import com.example.logentryservice.model.LogEntry;
 import com.example.logentryservice.service.LogEntryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +35,13 @@ public class LogEntriesController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new DefaultResponse("Смена завершена"));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetLogEntryByEmployeeIdResponse> getLogEntry(@PathVariable Long id) {
+        GetLogEntryByEmployeeIdResponse response = logEntryService.getAllLogEntriesByEmployee(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 }

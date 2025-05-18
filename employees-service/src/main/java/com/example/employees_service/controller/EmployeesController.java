@@ -2,7 +2,9 @@ package com.example.employees_service.controller;
 
 import com.example.employees_service.dto.EmployeeCreateUpdateDto;
 import com.example.employees_service.dto.EmployeeDto;
+import com.example.employees_service.dto.EmployeeWithEntryDto;
 import com.example.employees_service.service.EmployeeService;
+import com.example.employees_service.service.EmployeeServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,12 @@ public class EmployeesController {
     // для запросов с заголовком
     // @GetMapping("/byId")  // URL: /api/employees/byId
     //public ResponseEntity<EmployeeDto> getById(@RequestHeader("employee-id") Long id) { ... }
+
+    @GetMapping("/employeeEntry/{id}")
+    public ResponseEntity<EmployeeWithEntryDto> getEmployeeWithEntryById(@PathVariable Long id) {
+        EmployeeWithEntryDto response = employeeService.getEmployeeWithEntryById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PostMapping()
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeCreateUpdateDto createEmployeeDTO) {

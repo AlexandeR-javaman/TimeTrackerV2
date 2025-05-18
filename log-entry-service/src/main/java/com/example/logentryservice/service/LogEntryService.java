@@ -3,6 +3,7 @@ package com.example.logentryservice.service;
 import com.example.logentryservice.Repository.LogEntryRepository;
 import com.example.logentryservice.dto.request.EndRequest;
 import com.example.logentryservice.dto.request.StartRequest;
+import com.example.logentryservice.dto.response.GetLogEntryByEmployeeIdResponse;
 import com.example.logentryservice.exception.EntityIsExistException;
 import com.example.logentryservice.exception.EntityNotFoundException;
 import com.example.logentryservice.model.LogEntry;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,15 +35,17 @@ public class LogEntryService {
     }
 
     public void endLogEntry(EndRequest request) {
-        LogEntry logEntry = logEntryRepository.findById(request.logEntryId())
-                .orElseThrow(() -> new EntityNotFoundException("Смена не найдена"));
-        if (logEntry.getEndTime() != null) {
-            throw new EntityIsExistException("Эта смена уже завершена");
-        }
+        LogEntry logEntry = logEntryRepository.findByEmployeeIdAndEndTimeIsNull(request.employeeId())
+                .orElseThrow(() -> new EntityNotFoundException("У Вас еще нет начатых смен"));
         logEntry.setEndTime(LocalDateTime.now());
         logEntry.setMessage(request.message());
         var duration = Duration.between(logEntry.getStartTime(), logEntry.getEndTime());
         logEntry.setJobTime(duration.toSeconds()); // позднее исправить на toHours() или toMinutes()
         logEntryRepository.save(logEntry);
+    }
+
+    public GetLogEntryByEmployeeIdResponse getAllLogEntriesByEmployee(Long employeeId){
+        List<LogEntry> logEntryList = logEntryRepository.findByEmployeeId(employeeId);
+        return new GetLogEntryByEmployeeIdResponse(logEntryList);
     }
 }

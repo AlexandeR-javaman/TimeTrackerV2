@@ -2,6 +2,7 @@ package com.example.employees_service.service;
 
 import com.example.employees_service.dto.EmployeeCreateUpdateDto;
 import com.example.employees_service.dto.EmployeeDto;
+import com.example.employees_service.dto.EmployeeWithEntryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +13,6 @@ public interface EmployeeService {
     EmployeeDto save(EmployeeCreateUpdateDto createEmployeeDto);
     EmployeeDto update(EmployeeCreateUpdateDto updateEmployeeDto, Long id);
     boolean deleteById(Long id);
+
+    EmployeeWithEntryDto getEmployeeWithEntryById(Long id);
 }
