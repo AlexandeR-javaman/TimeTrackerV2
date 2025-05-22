@@ -31,7 +31,7 @@ public class Employee {
     private String patronymic;
 
     @Column(name = "stuff_id", nullable = false)
-    private int stuffId;
+    private Long stuffId;
 
     @Column(name = "employee_post", nullable = false)
     private String employeePost;

@@ -19,7 +19,7 @@
             <column name="patronymic" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="stuff_id" type="int">
+            <column name="stuff_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="employee_post" type="varchar(255)">

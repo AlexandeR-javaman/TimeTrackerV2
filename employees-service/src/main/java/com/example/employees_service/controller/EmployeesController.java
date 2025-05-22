@@ -25,7 +25,9 @@ public class EmployeesController {
     @GetMapping()
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
         List<EmployeeDto> employeeDtoList = employeeService.findAll();
-        return ResponseEntity.ok().body(employeeDtoList);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(employeeDtoList);
     }
 
     @GetMapping("/{id}")
@@ -43,20 +45,24 @@ public class EmployeesController {
     @GetMapping("/employeeEntry/{id}")
     public ResponseEntity<EmployeeWithEntryDto> getEmployeeWithEntryById(@PathVariable Long id) {
         EmployeeWithEntryDto response = employeeService.getEmployeeWithEntryById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 
     @PostMapping()
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeCreateUpdateDto createEmployeeDTO) {
         EmployeeDto createdEmployee = employeeService.save(createEmployeeDTO);
-        return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(createdEmployee);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeCreateUpdateDto updateEmployeeDTO,
                                                       @PathVariable Long id) {
         EmployeeDto updatedEmployee = employeeService.update(updateEmployeeDTO, id);
-        return updatedEmployee != null ? ResponseEntity.ok(updatedEmployee) : ResponseEntity.notFound().build();
+        return updatedEmployee != null ? ResponseEntity.status(HttpStatus.OK).body(updatedEmployee) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

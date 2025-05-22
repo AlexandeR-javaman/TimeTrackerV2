@@ -20,7 +20,7 @@ public class EmployeeCreateUpdateDto {
 
     private String patronymic;
 
-    private int stuffId;
+    private Long stuffId;
 
     private String employeePost;
 
