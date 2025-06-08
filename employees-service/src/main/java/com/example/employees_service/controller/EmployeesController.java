@@ -4,7 +4,7 @@ import com.example.employees_service.dto.EmployeeCreateUpdateDto;
 import com.example.employees_service.dto.EmployeeDto;
 import com.example.employees_service.dto.EmployeeWithEntryDto;
 import com.example.employees_service.service.EmployeeService;
-import com.example.employees_service.service.EmployeeServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +14,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
+@RequiredArgsConstructor
 public class EmployeesController {
 
     private final EmployeeService employeeService;
-
-    public EmployeesController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
 
     @GetMapping()
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
@@ -35,12 +32,6 @@ public class EmployeesController {
         Optional<EmployeeDto> employeeDto = employeeService.findById(id);
         return employeeDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-    // для запросов с параметром
-    // @GetMapping("/byId")  // URL: /api/employees/byId?id=5
-    //public ResponseEntity<EmployeeDto> getById(@RequestParam Long id) { ... }
-    // для запросов с заголовком
-    // @GetMapping("/byId")  // URL: /api/employees/byId
-    //public ResponseEntity<EmployeeDto> getById(@RequestHeader("employee-id") Long id) { ... }
 
     @GetMapping("/employeeEntry/{id}")
     public ResponseEntity<EmployeeWithEntryDto> getEmployeeWithEntryById(@PathVariable Long id) {
