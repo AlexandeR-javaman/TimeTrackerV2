@@ -35,5 +35,5 @@ export default function EmployeesPage() {
                 </ul>
             )}
         </div>
-        );
+    );
 }

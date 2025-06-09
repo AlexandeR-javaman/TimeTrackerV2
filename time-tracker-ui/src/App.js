@@ -1,15 +1,20 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import WelcomePage from './WelcomePage';
-import EmployeesPage from './EmployeesPage';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import AdminPanel from './components/AdminPanel';
+import EmployeePlaceholder from './components/EmployeePlaceholder';
+import './style.css';
 
-export default function App() {
-  return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<WelcomePage />} />
-          <Route path="/employees" element={<EmployeesPage />} />
-        </Routes>
-      </BrowserRouter>
-  );
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/employee" element={<EmployeePlaceholder />} />
+                <Route path="/admin" element={<AdminPanel />} />
+            </Routes>
+        </Router>
+    );
 }
+
+export default App;
