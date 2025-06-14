@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Home = () => (
+const HomePage = () => (
     <div style={{ textAlign: 'center', marginTop: '100px' }}>
         <h1>Добро пожаловать в систему учета</h1>
         <div style={{ marginTop: '30px' }}>
@@ -11,4 +11,4 @@ const Home = () => (
     </div>
 );
 
-export default Home;
+export default HomePage;
