@@ -1,6 +1,7 @@
-// utils/exportUtils.js
-export function exportTableToCSV(filename) {
-    const rows = Array.from(document.querySelectorAll('table tr'));
+export function exportTableToCSV(filename, tableElement) {
+    if (!tableElement) return;
+
+    const rows = Array.from(tableElement.querySelectorAll('tr'));
     const csvContent = rows.map(row =>
         Array.from(row.querySelectorAll('th, td'))
             .map(cell => {

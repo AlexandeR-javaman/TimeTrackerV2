@@ -1,138 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import Navbar from '../components/Navbar/Navbar';
-import EmployeeTable from '../components/EmployeeTable';
+import CustomTable from '../components/CustomTable';
+import { fetchEmployees } from '../api/employeeApi';
+import { exportTableToCSV } from '../utils/ExportUtils';
 
 const AdminPage = () => {
-    const role = 'Admin'; // получено после авторизации
+    const role = 'Admin';
     const username = 'Иван Петров';
+    const jwt = localStorage.getItem('token'); // или получить из контекста
+    const tableRef = useRef(null); // Создаем ref для таблицы
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         window.location.href = '/logout';
     };
 
-    const [employees, setEmployees] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const columns = [
+        // { key: 'id', label: 'ID', width: 50 },
+        { key: 'surname', label: 'Фамилия', width: '0.25%' },
+        { key: 'name', label: 'Имя', width: '20%' },
+        { key: 'patronymic', label: 'Отчество', width: '25%' },
+        { key: 'stuffId', label: 'Табельный номер', width: '10%' },
+        { key: 'employeePost', label: 'Должность', width: '20%' },
+    ];
 
-    useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                const response = await fetch('http://localhost:8081/api/employees');
-                if (!response.ok) {
-                    throw new Error('Ошибка при загрузке данных сотрудников');
-                }
-                const data = await response.json();
-                setEmployees(data);
-            } catch (error) {
-                console.error('Ошибка:', error);
-                setError(error.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchEmployees();
-    }, []);
+    const handleExport = () => {
+        if (!tableRef.current) return;
+        exportTableToCSV('Персонал.csv', tableRef.current);
+    };
 
     return (
         <>
             <Navbar role={role} username={username} onLogout={handleLogout} />
             <div className="content">
-                <EmployeeTable
-                    employees={employees}
-                    isLoading={isLoading}
-                    error={error}
+                <h2 className="table-title">Таблица сотрудников из базы данных</h2>
+                <CustomTable
+                    ref={tableRef} // Передаем ref в таблицу
+                    columns={columns}
+                    loadData={() => fetchEmployees(jwt)}
                 />
+                <div className="table-controls">
+                    <button
+                        className="export-button"
+                        onClick={handleExport}
+                    >
+                        Выгрузить
+                    </button>
+                </div>
             </div>
         </>
     );
 };
 
 export default AdminPage;
-
-// import React, { useEffect, useState } from 'react';
-//
-// const AdminPage = () => {
-//     const [employees, setEmployees] = useState([]);
-//
-//     useEffect(() => {
-//         fetch('http://localhost:8081/api/employees')
-//             .then(response => {
-//                 if (!response.ok) {
-//                     throw new Error('Ошибка при загрузке данных сотрудников');
-//                 }
-//                 return response.json();
-//             })
-//             .then(data => {
-//                 setEmployees(data);
-//             })
-//             .catch(error => {
-//                 console.error('Ошибка:', error);
-//                 // Можно добавить обработку ошибки или показать уведомление
-//             });
-//     }, []);
-//
-//     const exportTableToCSV = (filename) => {
-//         const rows = Array.from(document.querySelectorAll('table tr'));
-//         const csvContent = rows.map(row =>
-//             Array.from(row.querySelectorAll('th, td'))
-//                 .map(cell => `"${cell.textContent.replace(/"/g, '""')}"`)
-//                 .join(';')
-//         ).join('\n');
-//
-//         const bom = '\uFEFF';
-//         const fullContent = bom + csvContent;
-//         const blob = new Blob([fullContent], { type: 'text/csv;charset=utf-8;' });
-//         const link = document.createElement('a');
-//         link.href = URL.createObjectURL(blob);
-//         link.download = filename;
-//         link.click();
-//     };
-//
-//     return (
-//         <>
-//             <div className="navbar">
-//                 <button onClick={() => window.location.href = 'journal'}>Журнал работы сотрудников</button>
-//                 <button onClick={() => window.location.href = 'logEntry'}>Журнал смен</button>
-//                 <button onClick={() => window.location.href = 'addEmployee'}>Новый сотрудник</button>
-//                 <button onClick={() => window.location.href = '/logout'}>Выход</button>
-//             </div>
-//
-//             <div className="content">
-//                 <h1>Таблица сотрудников из базы данных</h1>
-//                 <table>
-//                     <thead>
-//                     <tr>
-//                         <th>Фамилия</th>
-//                         <th>Имя</th>
-//                         <th>Отчество</th>
-//                         <th>Табельный номер</th>
-//                         <th>Должность</th>
-//                     </tr>
-//                     </thead>
-//                     <tbody>
-//                     {employees.length === 0 ? (
-//                         <tr>
-//                             <td colSpan="5" style={{ textAlign: 'center' }}>Загрузка данных...</td>
-//                         </tr>
-//                     ) : (
-//                         employees.map(employee => (
-//                             <tr key={employee.id}>
-//                                 <td>{employee.surname}</td>
-//                                 <td>{employee.name}</td>
-//                                 <td>{employee.patronymic}</td>
-//                                 <td>{employee.stuffId}</td>
-//                                 <td>{employee.employeePost}</td>
-//                             </tr>
-//                         ))
-//                     )}
-//                     </tbody>
-//                 </table>
-//                 <button className="export-button" onClick={() => exportTableToCSV('Персонал.csv')}>Выгрузить</button>
-//             </div>
-//         </>
-//     );
-// };
-//
-// export default AdminPage;
