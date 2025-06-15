@@ -1,5 +1,6 @@
 package com.example.logentryservice.controller;
 
+import com.example.logentryservice.dto.LogEntryDto;
 import com.example.logentryservice.dto.request.EndRequest;
 import com.example.logentryservice.dto.request.StartRequest;
 import com.example.logentryservice.dto.response.DefaultResponse;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/log_entries")
@@ -40,6 +43,14 @@ public class LogEntriesController {
     @GetMapping("/{id}")
     public ResponseEntity<GetLogEntryByEmployeeIdResponse> getLogEntry(@PathVariable Long id) {
         GetLogEntryByEmployeeIdResponse response = logEntryService.getAllLogEntriesByEmployee(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<LogEntryDto>> getAllLogEntries() {
+        List<LogEntryDto> response = logEntryService.findAll();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

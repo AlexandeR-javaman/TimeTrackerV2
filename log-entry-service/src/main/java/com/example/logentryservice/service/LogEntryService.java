@@ -1,6 +1,7 @@
 package com.example.logentryservice.service;
 
 import com.example.logentryservice.Repository.LogEntryRepository;
+import com.example.logentryservice.dto.LogEntryDto;
 import com.example.logentryservice.dto.request.EndRequest;
 import com.example.logentryservice.dto.request.StartRequest;
 import com.example.logentryservice.dto.response.GetLogEntryByEmployeeIdResponse;
@@ -11,9 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,4 +51,19 @@ public class LogEntryService {
         List<LogEntry> logEntryList = logEntryRepository.findByEmployeeId(employeeId);
         return new GetLogEntryByEmployeeIdResponse(logEntryList);
     }
+
+    public List<LogEntryDto> findAll() {
+//        return employeesMapper.employeesListToEmployeesDTOList(employeesRepository.findAll());
+        return logEntryRepository.findAll().stream()
+                .map(logEntry -> LogEntryDto.builder()
+                        .id(logEntry.getId())
+                        .startTime(logEntry.getStartTime())
+                        .endTime(logEntry.getEndTime())
+                        .employeeId(logEntry.getEmployeeId())
+                        .message(logEntry.getMessage())
+                        .jobTime(logEntry.getJobTime())
+                        .date(LocalDate.now())
+                        .build())
+                .collect(Collectors.toList());
+            }
 }

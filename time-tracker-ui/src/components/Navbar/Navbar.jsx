@@ -1,10 +1,12 @@
 import AdminNavbar from './AdminNavbar';
 import EmployeeNavbar from './EmployeeNavbar';
+import NavButton from './NavButton';
+import React from "react";
 
 const Navbar = ({ role, username, onLogout }) => {
     return (
         <nav className="navbar">
-            <span className="navbar-user">👤 {username} ({role})</span>
+            <NavButton path="/admin" label={`👤 ${username} (${role})`} />
             <div className="navbar-links">
                 {role === 'Admin' && <AdminNavbar/>}
                 {role === 'Employee' && <EmployeeNavbar/>}

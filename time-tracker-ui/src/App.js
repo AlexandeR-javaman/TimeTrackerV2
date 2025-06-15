@@ -1,17 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import AdminPage from './pages/AdminPage';
-import EmployeePage from './pages/EmployeePage';
+import EmployeePageListOfEntries from './pages/EmployeePages/EmployeePageListOfEntries';
 import './style.css';
+import AdminPageStart from "./pages/AdminPages/AdminPageStart";
+import AdminPageListOfEmployees from "./pages/AdminPages/AdminPageListOfEmployees";
+import AdminPageListOfEntries from "./pages/AdminPages/AdminPageListOfEntries";
 
 function App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/employee" element={<EmployeePage />} />
-                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/employee/logentry" element={<EmployeePageListOfEntries />} />
+                <Route path="/admin" element={<AdminPageStart />} />
+                <Route path="/admin/employees" element={<AdminPageListOfEmployees />} />
+                <Route path="/admin/logentry" element={<AdminPageListOfEntries />} />
             </Routes>
         </Router>
     );
