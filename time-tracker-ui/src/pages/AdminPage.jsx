@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar/Navbar';
 import EmployeeTable from '../components/EmployeeTable';
 
 const AdminPage = () => {
+    const role = 'Admin'; // получено после авторизации
+    const username = 'Иван Петров';
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/logout';
+    };
+
     const [employees, setEmployees] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -29,7 +37,7 @@ const AdminPage = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar role={role} username={username} onLogout={handleLogout} />
             <div className="content">
                 <EmployeeTable
                     employees={employees}

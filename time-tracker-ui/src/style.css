@@ -9,6 +9,7 @@ body {
     display: flex;
     justify-content: space-around;
     padding: 15px;
+    align-items: center;
 }
 .navbar button {
     background-color: transparent;
@@ -19,9 +20,26 @@ body {
     padding: 10px 20px;
     transition: background-color 0.3s;
 }
+.navbar-user {
+    color: white;
+    margin-right: auto; /* Прижимает навигационные ссылки к центру */
+    padding-left: 20px;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 20px;
+    margin: 0 auto; /* Центрирует навигационные ссылки */
+}
+
 .navbar button:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
+.navbar-logout {
+    margin-left: auto; /* Прижимает к правому краю */
+    padding-right: 20px;
+}
+
 .content {
     text-align: center;
     margin-top: 50px;

@@ -1,4 +1,4 @@
-// components/NavButton.js
+// components/NavButton.jsx
 import React from 'react';
 
 function NavButton({ path, label }) {
