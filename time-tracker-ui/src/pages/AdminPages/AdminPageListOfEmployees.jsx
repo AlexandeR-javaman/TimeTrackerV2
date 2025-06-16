@@ -12,7 +12,7 @@ const AdminPageListOfEmployees = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        window.location.href = '/logout';
+        window.location.href = '/';
     };
 
     const columns = [

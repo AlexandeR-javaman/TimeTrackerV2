@@ -76,21 +76,21 @@ th {
     background-color: #007bff;
     color: white;
 }
-th:first-child, td:first-child {
-    width: 25%; /* Для первого столбца */
-}
-th:nth-child(2), td:nth-child(2) {
-    width: 20%; /* Для второго столбца */
-}
-th:nth-child(3), td:nth-child(3) {
-    width: 25%; /* Для третьего столбца */
-}
-th:nth-child(4), td:nth-child(4) {
-    width: 10%; /* Для четвертого столбца */
-}
-th:nth-child(5), td:nth-child(5) {
-    width: 20%; /* Для пятого столбца */
-}
+/*th:first-child, td:first-child {*/
+/*    width: 25%; !* Для первого столбца *!*/
+/*}*/
+/*th:nth-child(2), td:nth-child(2) {*/
+/*    width: 20%; !* Для второго столбца *!*/
+/*}*/
+/*th:nth-child(3), td:nth-child(3) {*/
+/*    width: 25%; !* Для третьего столбца *!*/
+/*}*/
+/*th:nth-child(4), td:nth-child(4) {*/
+/*    width: 10%; !* Для четвертого столбца *!*/
+/*}*/
+/*th:nth-child(5), td:nth-child(5) {*/
+/*    width: 20%; !* Для пятого столбца *!*/
+/*}*/
 .export-button {
     margin-top: 20px;
     padding: 10px 20px;

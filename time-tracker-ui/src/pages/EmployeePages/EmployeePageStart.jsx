@@ -3,8 +3,8 @@ import Navbar from '../../components/Navbar/Navbar';
 
 
 const AdminPageStart = () => {
-    const role = 'Admin';
-    const username = 'Иван Петров';
+    const role = 'User';
+    const username = 'Петр Иванов';
     const jwt = localStorage.getItem('token'); // или получить из контекста
     const tableRef = useRef(null); // Создаем ref для таблицы
 
@@ -18,7 +18,7 @@ const AdminPageStart = () => {
         <>
             <Navbar role={role} username={username} onLogout={handleLogout} />
             <div className="content">
-                <h2 className="title">Добро пожаловать на страницу Администратора</h2>
+                <h2 className="title">Добро пожаловать на страницу Юзера</h2>
             </div>
         </>
     );
