@@ -35,6 +35,7 @@ const EmployeePageListOfEntries = () => {
             <div className="content">
                 <h2 className="table-title">Таблица смен из базы данных</h2>
                 <CustomTable
+                    ref={tableRef}
                     columns={columns} // Без render-функций!
                     loadData={async () => {
                         const response = await fetchLogEntriesByEmployee(jwt);

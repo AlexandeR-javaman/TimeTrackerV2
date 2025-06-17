@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import CustomTable from '../../components/CustomTable';
 import { fetchLogEntries } from '../../api/logEntriesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
+import { loadLogEntriesWithEmployeeInfo } from '../../api/loadLogEntriesWithEmployeeInfoApi';
 
 const AdminPageListOfEntries = () => {
     const role = 'Admin';
@@ -18,9 +19,10 @@ const AdminPageListOfEntries = () => {
     const columns = [
         { key: 'id', label: 'Номер смены', width: '5%' },
         { key: 'employeeId', label: 'Таб. № сотрудн.', width: '5%' },
-        { key: 'startTime', label: 'Начало смены', width: '30%' },
-        { key: 'endTime', label: 'Окончание смены', width: '30%' },
-        { key: 'jobTime', label: 'Часов отработано', width: '10%' },
+        { key: 'fullName', label: 'ФИО', width: '25%' },
+        { key: 'startTime', label: 'Начало смены', width: '20%' },
+        { key: 'endTime', label: 'Окончание смены', width: '20%' },
+        { key: 'jobTime', label: 'Часов отработано', width: '5%' },
         { key: 'message', label: 'Сообщение', width: '20%' },
     ];
 
@@ -37,7 +39,7 @@ const AdminPageListOfEntries = () => {
                 <CustomTable
                     ref={tableRef} // Передаем ref в таблицу
                     columns={columns}
-                    loadData={() => fetchLogEntries(jwt)}
+                    loadData={() => loadLogEntriesWithEmployeeInfo(jwt)}
                 />
                 <div className="table-controls">
                     <button
