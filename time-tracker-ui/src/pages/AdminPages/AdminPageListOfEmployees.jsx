@@ -35,7 +35,7 @@ const AdminPageListOfEmployees = () => {
             <div className="content">
                 <h2 className="table-title">Таблица сотрудников из базы данных</h2>
                 <CustomTable
-                    ref={tableRef} // Передаем ref в таблицу
+                    ref={tableRef}
                     columns={columns}
                     loadData={() => fetchEmployees(jwt)}
                 />
