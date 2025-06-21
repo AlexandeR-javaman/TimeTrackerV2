@@ -5,8 +5,8 @@ const EmployeeNavbar = ({ username, onLogout }) => {
     return (
         <div>
             <NavButton path="/employee/logentry" label="Мои смены" />
-            <NavButton path="/startTime" label="Начать смену" />
-            <NavButton path="/endTime" label="Завершитьсмену" />
+            <NavButton path="/employee/startTime" label="Начать смену" />
+            <NavButton path="/employee/endTime" label="Завершитьсмену" />
         </div>
     );
 };

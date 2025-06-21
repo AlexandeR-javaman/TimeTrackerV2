@@ -1,12 +1,14 @@
 import React, { useRef } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import EndLogButton from "../../components/StartEndButton/EndLogButton";
 
 
-const EmployeePageStart = () => {
+const EmployeePageEnd = () => {
     const role = 'User';
     const username = 'Петр Иванов';
     const jwt = localStorage.getItem('token'); // или получить из контекста
     const tableRef = useRef(null); // Создаем ref для таблицы
+    const employeeId = 3;
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -18,10 +20,11 @@ const EmployeePageStart = () => {
         <>
             <Navbar role={role} username={username} onLogout={handleLogout} />
             <div className="content">
-                <h2 className="title">Добро пожаловать на страницу Юзера</h2>
+                <h2 className="title">Страница завершения смены</h2>
+                <EndLogButton employeeId={employeeId} />
             </div>
         </>
     );
 };
 
-export default EmployeePageStart;
+export default EmployeePageEnd;
