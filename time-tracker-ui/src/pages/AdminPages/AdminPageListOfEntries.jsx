@@ -3,7 +3,6 @@ import Navbar from '../../components/Navbar/Navbar';
 import CustomTable from '../../components/CustomTable';
 import { fetchLogEntries } from '../../api/logEntriesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
-import { loadLogEntriesWithEmployeeInfo } from '../../api/loadLogEntriesWithEmployeeInfoApi';
 import { getEmployeeFullNamesMap } from '../../utils/EmployeeFullNames';
 import {fetchLogEntriesByEmployee} from "../../api/logEntriesByEmployeeApi";
 

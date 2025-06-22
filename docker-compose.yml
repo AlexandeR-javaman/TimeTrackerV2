@@ -10,3 +10,16 @@ services:
       - POSTGRES_USER=postgres1
       - POSTGRES_PASSWORD=postgres1
       - POSTGRES_DB=TestDBInContainer
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    #    volumes:
+    #      - './config/keycloak/import:/opt/keycloak/data/import'
+    ports:
+      - "8090:8080"
+    command: start-dev
+#        command: start-dev --import-realm

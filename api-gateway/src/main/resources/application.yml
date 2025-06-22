@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: Api-Gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8090/realms/master
+  cloud:
+    gateway:
+      routes:
+        - id: employees_service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/employees_service/**
+          filters:
+            - StripPrefix=1
+
+        - id: log_entry_service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/log_entry_service/**
+          filters:
+            - StripPrefix=1
+
+server:
+  port: 8080
+frontend:
+  url: ${FRONTEND_URL:http://localhost:3000}

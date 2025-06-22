@@ -1,5 +1,8 @@
 export const fetchLogEntries = async (jwt) => {
-    const response = await fetch('http://localhost:8080/api/log_entries', {
+
+    const API_URL = process.env.REACT_APP_API_GATEWAY_BASE_URL; //http://localhost:8080/log_entry_service/api/log_entries
+    const LOG_ENTRY_PATH = process.env.REACT_APP_LOG_ENTRY_PATH;//http://localhost:8082
+    const response = await fetch(`${API_URL}${LOG_ENTRY_PATH}/api/log_entries`, {
         headers: {
             Authorization: `Bearer ${jwt}`,
         },

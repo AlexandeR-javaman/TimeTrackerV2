@@ -34,6 +34,4 @@ spring:
       url: /v3/api-docs
 
 server:
-  port: 8080
-frontend:
-  url: ${FRONTEND_URL:http://localhost:3000}
+  port: 8082

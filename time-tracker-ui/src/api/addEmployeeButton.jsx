@@ -61,7 +61,9 @@ const EmployeeRegistrationForm = () => {
 
         setIsSubmitting(true);
         try {
-            const response = await axios.post('http://localhost:8081/api/employees', employee, {
+            const API_URL = process.env.REACT_APP_API_GATEWAY_BASE_URL;
+            const EMPLOYEE_PATH = process.env.REACT_APP_EMPLOYEE_PATH;
+            const response = await axios.post(`${API_URL}${EMPLOYEE_PATH}/api/employees`, employee, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

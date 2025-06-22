@@ -22,8 +22,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml # Указываем путь к главному файлу изменений
 server:
   port: 8081
-frontend:
-  url: ${FRONTEND_URL:http://localhost:3000}
+
 
 
 #logging:
