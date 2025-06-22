@@ -9,6 +9,7 @@ import AdminPageListOfEntries from "./pages/AdminPages/AdminPageListOfEntries";
 import EmployeePageStart from "./pages/EmployeePages/EmployeePageStart";
 import EmployeePageStartTime from "./pages/EmployeePages/EmployeePageStartTime";
 import EmployeePageEndTime from "./pages/EmployeePages/EmployeePageEndTime";
+import AdminPageAddEmployee from "./pages/AdminPages/AdminPageAddEmployee";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/admin" element={<AdminPageStart />} />
                 <Route path="/admin/employees" element={<AdminPageListOfEmployees />} />
                 <Route path="/admin/logentry" element={<AdminPageListOfEntries />} />
+                <Route path="/admin/addemployee" element={<AdminPageAddEmployee />} />
             </Routes>
         </Router>
     );
