@@ -1,10 +1,25 @@
 import AdminNavbar from './AdminNavbar';
 import EmployeeNavbar from './EmployeeNavbar';
 import NavButton from './NavButton';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import keycloak from '../../keycloak';
 
-const Navbar = ({ role, username, onLogout }) => {
+const Navbar = () => {
+    const [role, setRole] = useState('');
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        if (keycloak.authenticated) {
+            const roles = keycloak.tokenParsed?.realm_access?.roles || [];
+            const firstRole = roles[1] || '';
+            setRole(firstRole);
+
+            const preferredUsername = keycloak.tokenParsed?.preferred_username || '';
+            const fullName = keycloak.tokenParsed?.name || preferredUsername;
+            setUsername(fullName);
+        }
+    }, []);
+
     const rolePaths = {
         Admin: '/admin',
         User: '/employee'
@@ -37,8 +52,8 @@ const Navbar = ({ role, username, onLogout }) => {
         <nav className="navbar">
             <NavButton path={profilePath} label={`${icon} ${username} (${role})`} />
             <div className="navbar-links">
-                {role === 'Admin' && <AdminNavbar/>}
-                {role === 'User' && <EmployeeNavbar/>}
+                {role === 'ADMIN' && <AdminNavbar/>}
+                {role === 'USER' && <EmployeeNavbar/>}
             </div>
             <button className="navbar-logout" onClick={handleLogout}>Выход</button>
         </nav>

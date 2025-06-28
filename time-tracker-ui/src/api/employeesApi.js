@@ -22,7 +22,7 @@ const EMPLOYEE_PATH = process.env.REACT_APP_EMPLOYEE_PATH;
 export const fetchEmployees = async () => {
     const response = await axios.get(`${API_URL}${EMPLOYEE_PATH}/api/employees`, {
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
     });
@@ -30,14 +30,12 @@ export const fetchEmployees = async () => {
 };
 
 export const registerEmployee = async (employee) => {
-    const token = keycloak.token;
-
     const response = await axios.post(
         `${API_URL}${EMPLOYEE_PATH}/api/employees`,
         employee,
         {
             headers: {
-                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
         }
