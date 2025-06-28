@@ -2,6 +2,7 @@ import AdminNavbar from './AdminNavbar';
 import EmployeeNavbar from './EmployeeNavbar';
 import NavButton from './NavButton';
 import React from "react";
+import keycloak from '../../keycloak';
 
 const Navbar = ({ role, username, onLogout }) => {
     const rolePaths = {
@@ -15,6 +16,22 @@ const Navbar = ({ role, username, onLogout }) => {
         Manager: '💼'
     };
     const icon = roleIcons[role] || '🔹';
+    // const navigate = useNavigate();
+    // const handleLogout = () => {
+    //     // 1. Удаляем токен из localStorage
+    //     localStorage.removeItem('jwtToken');
+    //     // 2. Опционально: очищаем другие данные
+    //     localStorage.removeItem('userData');
+    //     // 3. Перенаправляем на страницу входа
+    //     navigate('/');
+    //     // 4. Можно обновить страницу, чтобы сбросить состояние
+    //     window.location.reload(); // Если нужно
+    // };
+    const handleLogout = () => {
+        keycloak.logout({
+            redirectUri: window.location.origin
+        });
+    };
 
     return (
         <nav className="navbar">
@@ -23,7 +40,7 @@ const Navbar = ({ role, username, onLogout }) => {
                 {role === 'Admin' && <AdminNavbar/>}
                 {role === 'User' && <EmployeeNavbar/>}
             </div>
-            <button className="navbar-logout" onClick={onLogout}>Выход</button>
+            <button className="navbar-logout" onClick={handleLogout}>Выход</button>
         </nav>
     );
 };

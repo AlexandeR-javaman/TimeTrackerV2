@@ -29,14 +29,23 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/log_entry_service/").permitAll()
-                        .pathMatchers("/employees_service/").hasRole("USER")
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                        .pathMatchers("/log_entry_service/**").permitAll()
+                        .pathMatchers("/employees_service/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
+                        )
+                )
                 .build();
     }
 
+    private ReactiveJwtAuthenticationConverter grantedAuthoritiesExtractor() {
+        ReactiveJwtAuthenticationConverter converter = new ReactiveJwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter());
+        return converter;
+    }
 
 }
