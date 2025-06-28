@@ -22,6 +22,7 @@ const EMPLOYEE_PATH = process.env.REACT_APP_EMPLOYEE_PATH;
 export const fetchEmployees = async () => {
     const response = await axios.get(`${API_URL}${EMPLOYEE_PATH}/api/employees`, {
         headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
     });
