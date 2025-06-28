@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .pathMatchers("/log_entry_service/**").permitAll()
+                        .pathMatchers("/employees_service/api/employees").hasRole("ADMIN")
                         .pathMatchers("/employees_service/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )

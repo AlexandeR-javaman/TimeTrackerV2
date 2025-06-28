@@ -11,8 +11,8 @@ const Navbar = ({ role, username, onLogout }) => {
     };
     const profilePath = rolePaths[role] || '/';
     const roleIcons = {
-        Admin: '👑',
-        User: '👤',
+        ADMIN: '👑',
+        USER: '👤',
         Manager: '💼'
     };
     const icon = roleIcons[role] || '🔹';

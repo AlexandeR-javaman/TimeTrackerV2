@@ -23,6 +23,8 @@ public class EmployeeService {
 
     private final LogEntryClient logEntryClient;
 
+    private final KeycloakUserService keycloakUserService;
+
     public List<EmployeeDto> findAll() {
 //        return employeesMapper.employeesListToEmployeesDTOList(employeesRepository.findAll());
         return employeeRepository.findAll().stream()
@@ -55,28 +57,62 @@ public class EmployeeService {
                         .build());
     }
 
-    public EmployeeDto save(EmployeeCreateUpdateDto createEmployeeDTO) {
-//        Employees employee = employeesMapper.dtoToEntity(createEmployeeDTO); // если через маппер, но не будет даты
+//    public EmployeeDto save(EmployeeCreateUpdateDto createEmployeeDTO) {
+////        Employees employee = employeesMapper.dtoToEntity(createEmployeeDTO); // если через маппер, но не будет даты
+//        Employee employee = Employee.builder()
+//                .surname(createEmployeeDTO.getSurname())
+//                .name(createEmployeeDTO.getName())
+//                .patronymic(createEmployeeDTO.getPatronymic())
+//                .stuffId(createEmployeeDTO.getStuffId())
+//                .employeePost(createEmployeeDTO.getEmployeePost())
+//                .role(createEmployeeDTO.getRole())
+//                .login(createEmployeeDTO.getLogin())
+//                .password(createEmployeeDTO.getPassword())
+//                .build();
+//        Employee savedEmployee = employeeRepository.save(employee);
+////        return employeesMapper.entityToDto(savedEmployee); // если через маппер, но не будет даты
+//        return EmployeeDto.builder()
+//                .id(savedEmployee.getId())
+//                .surname(savedEmployee.getSurname())
+//                .name(savedEmployee.getName())
+//                .patronymic(savedEmployee.getPatronymic())
+//                .stuffId(savedEmployee.getStuffId())
+//                .employeePost(savedEmployee.getEmployeePost())
+//                .role(savedEmployee.getRole())
+//                .date(LocalDate.now())
+//                .build();
+//    }
+
+    public EmployeeDto save(EmployeeCreateUpdateDto dto) {
+        // 👇 Добавляем в Keycloak
+        keycloakUserService.createUser(
+                dto.getLogin(),
+                dto.getPassword(),
+                dto.getRole().replace("ROLE_", "") // убираем префикс
+        );
+
+        // 👇 Сохраняем в свою БД (если нужно)
         Employee employee = Employee.builder()
-                .surname(createEmployeeDTO.getSurname())
-                .name(createEmployeeDTO.getName())
-                .patronymic(createEmployeeDTO.getPatronymic())
-                .stuffId(createEmployeeDTO.getStuffId())
-                .employeePost(createEmployeeDTO.getEmployeePost())
-                .role(createEmployeeDTO.getRole())
-                .login(createEmployeeDTO.getLogin())
-                .password(createEmployeeDTO.getPassword())
+                .surname(dto.getSurname())
+                .name(dto.getName())
+                .patronymic(dto.getPatronymic())
+                .stuffId(dto.getStuffId())
+                .employeePost(dto.getEmployeePost())
+                .role(dto.getRole())
+                .login(dto.getLogin())
+                .password(dto.getPassword()) // ❗️ Лучше не хранить
                 .build();
-        Employee savedEmployee = employeeRepository.save(employee);
-//        return employeesMapper.entityToDto(savedEmployee); // если через маппер, но не будет даты
+
+        Employee saved = employeeRepository.save(employee);
+
         return EmployeeDto.builder()
-                .id(savedEmployee.getId())
-                .surname(savedEmployee.getSurname())
-                .name(savedEmployee.getName())
-                .patronymic(savedEmployee.getPatronymic())
-                .stuffId(savedEmployee.getStuffId())
-                .employeePost(savedEmployee.getEmployeePost())
-                .role(savedEmployee.getRole())
+                .id(saved.getId())
+                .surname(saved.getSurname())
+                .name(saved.getName())
+                .patronymic(saved.getPatronymic())
+                .stuffId(saved.getStuffId())
+                .employeePost(saved.getEmployeePost())
+                .role(saved.getRole())
                 .date(LocalDate.now())
                 .build();
     }
