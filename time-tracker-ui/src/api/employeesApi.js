@@ -1,28 +1,33 @@
 import keycloak from '../keycloak';
 import axios from 'axios';
 
-const token = keycloak.token;
 const API_URL = process.env.REACT_APP_API_GATEWAY_BASE_URL;
 const EMPLOYEE_PATH = process.env.REACT_APP_EMPLOYEE_PATH;
 
-// export const fetchEmployees = async () => {
-//
-//     const response = await fetch(`${API_URL}${EMPLOYEE_PATH}/api/employees`, {
-//         headers: {
-//             Authorization: `Bearer ${token}`,
-//         },
-//     });
-//
-//     if (!response.ok) {
-//         throw new Error('Ошибка при загрузке данных сотрудников');
-//     }
-//
-//     return await response.json();
-// };
+// Функция для получения актуального токена
+const getValidToken = async () => {
+    try {
+        // Обновляем токен, если он протух
+        const refreshed = await keycloak.updateToken(30);
+        if (refreshed) {
+            console.log("Токен обновлён:", keycloak.token);
+        }
+
+        // Убираем "Bearer ", если он уже есть в токене
+        return keycloak.token.startsWith("Bearer ")
+            ? keycloak.token.slice(7)
+            : keycloak.token;
+    } catch (err) {
+        console.error("Ошибка обновления токена:", err);
+        throw err;
+    }
+};
+
 export const fetchEmployees = async () => {
+    const token = await getValidToken();
     const response = await axios.get(`${API_URL}${EMPLOYEE_PATH}/api/employees`, {
         headers: {
-            // 'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
     });
@@ -30,16 +35,16 @@ export const fetchEmployees = async () => {
 };
 
 export const registerEmployee = async (employee) => {
+    const token = await getValidToken();
     const response = await axios.post(
         `${API_URL}${EMPLOYEE_PATH}/api/employees`,
         employee,
         {
             headers: {
-                // 'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
         }
     );
-
     return response.data;
 };
