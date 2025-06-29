@@ -194,7 +194,8 @@
 // export default EmployeeRegistrationForm;
 
 import React, { useState } from 'react';
-import { registerEmployee } from './employeesApi';
+import { registerEmployee } from '../api/employeesApi';
+import styles from './AddEmployeeForm.module.css';
 
 const EmployeeRegistrationForm = () => {
     const [employee, setEmployee] = useState({
@@ -283,7 +284,7 @@ const EmployeeRegistrationForm = () => {
 
     return (
         <div className="content">
-            <div className="registration-form">
+            <div className={styles["registration-form"]}>
                 <h2>Регистрация нового сотрудника</h2>
                                 <form onSubmit={handleSubmit} autoComplete="off">
                                     <input

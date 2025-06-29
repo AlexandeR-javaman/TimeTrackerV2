@@ -7,21 +7,14 @@ import { getEmployeeFullNamesMap } from '../../utils/EmployeeFullNames';
 import {fetchLogEntriesByEmployee} from "../../api/logEntriesByEmployeeApi";
 
 const AdminPageListOfEntries = () => {
-    const role = 'Admin';
-    const username = 'Иван Петров';
-    const jwt = localStorage.getItem('token');
+
     const tableRef = useRef(null);
     const [fullNameMap, setFullNameMap] = useState(new Map());
 
     useEffect(() => {
-        getEmployeeFullNamesMap(jwt).then(setFullNameMap);
-    }, [jwt]);
+        getEmployeeFullNamesMap().then(setFullNameMap);
+    }, );
 
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-    };
 
     const columns = [
         { key: 'id', label: 'Номер смены', width: '5%' },
@@ -45,14 +38,14 @@ const AdminPageListOfEntries = () => {
 
     return (
         <>
-            <Navbar role={role} username={username} onLogout={handleLogout} />
+            <Navbar />
             <div className="content">
                 <h2 className="table-title">Таблица смен из базы данных</h2>
                 <CustomTable
                     ref={tableRef}
                     columns={columns}
                     loadData={async () => {
-                        const response = await fetchLogEntries(jwt);
+                        const response = await fetchLogEntries();
                         return response.map(item => ({
                             ...item,
                             jobTime: `${item.jobTime} ч.`,

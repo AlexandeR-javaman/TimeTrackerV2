@@ -5,15 +5,8 @@ import { fetchEmployees } from '../../api/employeesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
 
 const AdminPageListOfEmployees = () => {
-    const role = 'Admin';
-    const username = 'Иван Петров';
-    const jwt = localStorage.getItem('token'); // или получить из контекста
-    const tableRef = useRef(null); // Создаем ref для таблицы
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-    };
+    const tableRef = useRef(null); // Создаем ref для таблицы
 
     const columns = [
         // { key: 'id', label: 'ID', width: 50 },
@@ -31,13 +24,13 @@ const AdminPageListOfEmployees = () => {
 
     return (
         <>
-            <Navbar role={role} username={username} onLogout={handleLogout} />
+            <Navbar />
             <div className="content">
                 <h2 className="table-title">Таблица сотрудников из базы данных</h2>
                 <CustomTable
                     ref={tableRef}
                     columns={columns}
-                    loadData={() => fetchEmployees(jwt)}
+                    loadData={() => fetchEmployees()}
                 />
                 <div className="table-controls">
                     <button

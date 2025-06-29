@@ -9,39 +9,36 @@ const Navbar = () => {
     const [username, setUsername] = useState('');
 
     useEffect(() => {
-        if (keycloak.authenticated) {
-            const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-            const firstRole = roles[1] || '';
-            setRole(firstRole);
-
-            const preferredUsername = keycloak.tokenParsed?.preferred_username || '';
-            const fullName = keycloak.tokenParsed?.name || preferredUsername;
-            setUsername(fullName);
+        if (!keycloak.authenticated || !keycloak.tokenParsed) return;
+        const roles = keycloak.tokenParsed?.realm_access?.roles || [];
+        // Определяем роль вручную по приоритету
+        let selectedRole = '';
+        if (roles.includes('ADMIN')) {
+            selectedRole = 'ADMIN';
+        } else if (roles.includes('USER')) {
+            selectedRole = 'USER';
         }
+            // const firstRole = roles[1] || '';
+        setRole(selectedRole);
+
+        const preferredUsername = keycloak.tokenParsed?.preferred_username || '';
+        const fullName = keycloak.tokenParsed?.name || preferredUsername;
+        setUsername(fullName);
+
     }, []);
 
     const rolePaths = {
-        Admin: '/admin',
-        User: '/employee'
+        ADMIN: '/admin',
+        USER: '/employee'
     };
     const profilePath = rolePaths[role] || '/';
     const roleIcons = {
         ADMIN: '👑',
         USER: '👤',
-        Manager: '💼'
+        MANAGER: '💼'
     };
     const icon = roleIcons[role] || '🔹';
-    // const navigate = useNavigate();
-    // const handleLogout = () => {
-    //     // 1. Удаляем токен из localStorage
-    //     localStorage.removeItem('jwtToken');
-    //     // 2. Опционально: очищаем другие данные
-    //     localStorage.removeItem('userData');
-    //     // 3. Перенаправляем на страницу входа
-    //     navigate('/');
-    //     // 4. Можно обновить страницу, чтобы сбросить состояние
-    //     window.location.reload(); // Если нужно
-    // };
+
     const handleLogout = () => {
         keycloak.logout({
             redirectUri: window.location.origin
