@@ -18,11 +18,7 @@ export const getValidToken = async () => {
             throw new Error("Токен не получен");
         }
 
-        // Убираем "Bearer ", если он уже есть
-        // return keycloak.token.replace(/^Bearer\s+/i, ''); // вариант №2
-        return keycloak.token.startsWith("Bearer ")
-            ? keycloak.token.slice(7)
-            : keycloak.token;
+        return keycloak.token;
     } catch (err) {
         console.error("Ошибка обновления токена:", err);
         throw new Error("Не удалось получить валидный токен");

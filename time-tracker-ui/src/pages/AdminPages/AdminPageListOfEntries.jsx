@@ -13,7 +13,7 @@ const AdminPageListOfEntries = () => {
 
     useEffect(() => {
         getEmployeeFullNamesMap().then(setFullNameMap);
-    }, );
+    }, []);
 
 
     const columns = [

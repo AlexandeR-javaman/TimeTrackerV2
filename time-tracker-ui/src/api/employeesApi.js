@@ -1,4 +1,3 @@
-// import keycloak from '../keycloak';
 import axios from 'axios';
 import { getValidToken } from '../utils/authUtils'; // Функция для получения актуального токена
 import {handleApiError, withErrorHandling} from '../utils/apiErrorHandler'; // обработка ошибок

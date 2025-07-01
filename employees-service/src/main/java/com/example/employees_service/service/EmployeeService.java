@@ -85,7 +85,7 @@ public class EmployeeService {
 
     public EmployeeDto save(EmployeeCreateUpdateDto dto) {
         // 👇 Добавляем в Keycloak
-        keycloakUserService.createUser(
+        String userId = keycloakUserService.createUser(
                 dto.getLogin(),
                 dto.getPassword(),
                 dto.getRole().replace("ROLE_", "") // убираем префикс
@@ -100,7 +100,7 @@ public class EmployeeService {
                 .employeePost(dto.getEmployeePost())
                 .role(dto.getRole())
                 .login(dto.getLogin())
-                .password(dto.getPassword()) // ❗️ Лучше не хранить
+                .keycloakId(userId)
                 .build();
 
         Employee saved = employeeRepository.save(employee);
@@ -127,7 +127,7 @@ public class EmployeeService {
                     foundEmployee.setEmployeePost(employeeDTO.getEmployeePost());
                     foundEmployee.setRole(employeeDTO.getRole());
                     foundEmployee.setLogin(employeeDTO.getLogin());
-                    foundEmployee.setPassword(employeeDTO.getPassword());
+//                    foundEmployee.setPassword(employeeDTO.getPassword());
                     Employee updatedEmployee = employeeRepository.save(foundEmployee);
 //                    return employeesMapper.entityToDto(updatedEmployee);
                     return EmployeeDto.builder()
