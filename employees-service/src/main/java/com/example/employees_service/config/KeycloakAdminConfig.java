@@ -35,7 +35,7 @@ public class KeycloakAdminConfig {
                 .grantType(OAuth2Constants.PASSWORD)
                 .build();
     }
-
+//todo сделать потом
     @Bean
     public String keycloakRealm() {
         return realm;
