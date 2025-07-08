@@ -31,7 +31,7 @@
             <column name="login" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password" type="varchar(255)">
+            <column name="keycloak_id" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

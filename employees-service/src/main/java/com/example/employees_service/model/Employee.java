@@ -42,7 +42,7 @@ public class Employee {
     @Column(name = "login", nullable = false)
     private String login;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "keycloak_id", nullable = false)
+    private String keycloakId;
 
 }

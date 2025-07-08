@@ -22,7 +22,7 @@ public class KeycloakUserService {
         this.realm = realm;
     }
 
-    public void createUser(String username, String password, String roleName) {
+    public String createUser(String username, String password, String roleName) {
         // Создаем представление пароля
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setTemporary(false);
@@ -60,5 +60,6 @@ public class KeycloakUserService {
                 .roles()
                 .realmLevel()
                 .add(Collections.singletonList(role));
+    return userId;
     }
 }
