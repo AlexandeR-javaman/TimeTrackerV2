@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import CustomTable from '../../components/CustomTable';
-import { fetchLogEntriesByEmployee } from '../../api/logEntriesByEmployeeApi';
+import { fetchLogEntriesByEmployee } from '../../api/logEntriesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
 
 const EmployeePageListOfEntries = () => {
@@ -38,7 +38,7 @@ const EmployeePageListOfEntries = () => {
                     ref={tableRef}
                     columns={columns}
                     loadData={async () => {
-                        const response = await fetchLogEntriesByEmployee(jwt);
+                        const response = await fetchLogEntriesByEmployee();
                         return response.logEntryList.map(item => ({
                             ...item,
                             jobTime: `${item.jobTime} ч.`
