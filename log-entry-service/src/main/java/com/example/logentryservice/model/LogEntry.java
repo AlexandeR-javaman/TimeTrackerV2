@@ -29,6 +29,9 @@ public class LogEntry {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @Column(name = "keycloak_id", nullable = false)
+    private String keycloakId;
+
     @Column(name = "employee_id", nullable = false)
     private Long employeeId;
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getValidToken } from '../utils/authUtils'; // Функция для получения актуального токена
+import {getUserIdFromKeycloak, getValidToken} from '../utils/authUtils'; // Функция для получения актуального токена
 import {handleApiError, withErrorHandling} from '../utils/apiErrorHandler'; // обработка ошибок
 
 const API_URL = process.env.REACT_APP_API_GATEWAY_BASE_URL;
@@ -42,7 +42,11 @@ export const fetchLogEntries = async () => {
 export const fetchLogEntriesByEmployee = async () => {
     try {
     const token = await getValidToken();
-    const response = await axios.get(`${API_URL}${LOG_ENTRY_PATH}/api/log_entries/2`, {
+    const userId = await getUserIdFromKeycloak();
+        if (!userId) {
+            throw new Error('Не удалось получить ID пользователя из токена');
+        }
+    const response = await axios.get(`${API_URL}${LOG_ENTRY_PATH}/api/log_entries/${userId}`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

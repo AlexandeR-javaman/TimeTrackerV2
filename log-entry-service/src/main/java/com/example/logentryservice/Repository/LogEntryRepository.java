@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LogEntryRepository extends JpaRepository<LogEntry, Long> {
-    public Optional<LogEntry> findByEmployeeIdAndEndTimeIsNull(Long employeeId);
-    public List<LogEntry> findByEmployeeId(Long employeeId);
+    public Optional<LogEntry> findByKeycloakIdAndEndTimeIsNull(String keycloakId);
+    public List<LogEntry> findByKeycloakId(String keycloakId);
 }

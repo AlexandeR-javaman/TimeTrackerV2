@@ -10,6 +10,7 @@
                   separator="," encoding="UTF-8" relativeToChangelogFile="true">
             <column name="start_time" type="timestamp"/>
             <column name="end_time" type="timestamp"/>
+            <column name="keycloak_id" type="varchar(255)"/>
             <column name="employee_id" type="bigint"/>
             <column name="message" type="varchar(255)"/>
             <column name="job_time" type="float"/>

@@ -1,8 +1,9 @@
 import { fetchEmployees } from '../api/employeesApi.js';
 
-export const getEmployeeFullNamesMap = async (jwt) => {
+export const getEmployeeFullNamesMap = async () => {
     try {
-        const employees = await fetchEmployees(jwt);
+        const employees = await fetchEmployees();
+        console.log("проверяем каких сотрудников получили", employees);
         const fullNameMap = new Map();
 
         employees.forEach((employee) => {

@@ -13,7 +13,7 @@ const AdminPageListOfEmployees = () => {
         { key: 'surname', label: 'Фамилия', width: '25%' },
         { key: 'name', label: 'Имя', width: '20%' },
         { key: 'patronymic', label: 'Отчество', width: '25%' },
-        { key: 'stuffId', label: 'Табельный номер', width: '10%' },
+        { key: 'stuffId', label: 'Таб. № сотрудн.', width: '10%' },
         { key: 'employeePost', label: 'Должность', width: '20%' },
     ];
 

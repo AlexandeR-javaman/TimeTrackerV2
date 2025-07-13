@@ -41,10 +41,10 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<EmployeeDto> findById(Long id) {
+    public Optional<EmployeeDto> findById(String keycloak_id) {
 //        return employeesRepository.findById(id)       // если надо через маппер
 //                .map(employeesMapper::entityToDto);  // если надо через маппер
-        return employeeRepository.findById(id)
+        return employeeRepository.findByKeycloakId(keycloak_id)
                 .map(employee -> EmployeeDto.builder()
                         .id(employee.getId())
                         .surname(employee.getSurname())

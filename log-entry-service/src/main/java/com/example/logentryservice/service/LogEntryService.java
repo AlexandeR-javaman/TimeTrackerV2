@@ -1,10 +1,12 @@
 package com.example.logentryservice.service;
 
+import com.example.logentryservice.Integration.EmployeesClient;
 import com.example.logentryservice.Repository.LogEntryRepository;
+import com.example.logentryservice.dto.EmployeeIDDto;
 import com.example.logentryservice.dto.LogEntryDto;
 import com.example.logentryservice.dto.request.EndRequest;
 import com.example.logentryservice.dto.request.StartRequest;
-import com.example.logentryservice.dto.response.GetLogEntryByEmployeeIdResponse;
+import com.example.logentryservice.dto.response.GetLogEntriesByEmployeeIdResponse;
 import com.example.logentryservice.exception.EntityIsExistException;
 import com.example.logentryservice.exception.EntityNotFoundException;
 import com.example.logentryservice.model.LogEntry;
@@ -23,22 +25,27 @@ import java.util.stream.Collectors;
 public class LogEntryService {
 
     private final LogEntryRepository logEntryRepository;
+    private final EmployeesClient employeesClient;
 
     public Long startLogEntry(StartRequest request) {
-        Optional<LogEntry> startLogEntry = logEntryRepository.findByEmployeeIdAndEndTimeIsNull(request.employeeId());
+        Optional<LogEntry> startLogEntry = logEntryRepository.findByKeycloakIdAndEndTimeIsNull(request.keycloakId());
         if (startLogEntry.isPresent()) {
             throw new EntityIsExistException("У Вас уже есть незавершенная смена");
         }
+        EmployeeIDDto employeeDto = employeesClient.getEmployeeById(request.keycloakId());
+        Long employeeId = employeeDto.getStuffId(); // Предполагаем, что EmployeeIDDto содержит поле id
+
         LogEntry logEntry = LogEntry.builder()
                 .startTime(LocalDateTime.now())
-                .employeeId(request.employeeId())
+                .keycloakId(request.keycloakId())
+                .employeeId(employeeId)
                 .build();
         LogEntry savedLogEntry = logEntryRepository.save(logEntry);
         return savedLogEntry.getId();
     }
 
     public void endLogEntry(EndRequest request) {
-        LogEntry logEntry = logEntryRepository.findByEmployeeIdAndEndTimeIsNull(request.employeeId())
+        LogEntry logEntry = logEntryRepository.findByKeycloakIdAndEndTimeIsNull(request.keycloakId())
                 .orElseThrow(() -> new EntityNotFoundException("У Вас еще нет начатых смен"));
         logEntry.setEndTime(LocalDateTime.now());
         logEntry.setMessage(request.message());
@@ -47,9 +54,9 @@ public class LogEntryService {
         logEntryRepository.save(logEntry);
     }
 
-    public GetLogEntryByEmployeeIdResponse getAllLogEntriesByEmployee(Long employeeId){
-        List<LogEntry> logEntryList = logEntryRepository.findByEmployeeId(employeeId);
-        return new GetLogEntryByEmployeeIdResponse(logEntryList);
+    public GetLogEntriesByEmployeeIdResponse getAllLogEntriesByEmployee(String keycloakId){
+        List<LogEntry> logEntryList = logEntryRepository.findByKeycloakId(keycloakId);
+        return new GetLogEntriesByEmployeeIdResponse(logEntryList);
     }
 
     public List<LogEntryDto> findAll() {
@@ -59,6 +66,7 @@ public class LogEntryService {
                         .id(logEntry.getId())
                         .startTime(logEntry.getStartTime())
                         .endTime(logEntry.getEndTime())
+                        .keycloakId(logEntry.getKeycloakId())
                         .employeeId(logEntry.getEmployeeId())
                         .message(logEntry.getMessage())
                         .jobTime(logEntry.getJobTime())

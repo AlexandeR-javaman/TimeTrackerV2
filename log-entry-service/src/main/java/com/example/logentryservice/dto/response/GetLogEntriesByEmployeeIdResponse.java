@@ -4,5 +4,5 @@ import com.example.logentryservice.model.LogEntry;
 
 import java.util.List;
 
-public record GetLogEntryByEmployeeIdResponse(List<LogEntry> logEntryList) {
+public record GetLogEntriesByEmployeeIdResponse(List<LogEntry> logEntryList) {
 }

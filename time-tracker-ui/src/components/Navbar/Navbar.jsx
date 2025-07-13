@@ -25,7 +25,7 @@ const Navbar = () => {
         const fullName = keycloak.tokenParsed?.name || preferredUsername;
         setUsername(fullName);
 
-        console.log("Парсим токен для ID", keycloak.tokenParsed.sub);
+        // console.log("Парсим токен для ID", keycloak.tokenParsed.sub);
     }, []);
 
     const rolePaths = {

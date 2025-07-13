@@ -24,3 +24,28 @@ export const getValidToken = async () => {
         throw new Error("Не удалось получить валидный токен");
     }
 };
+
+/**
+ * Получает ID пользователя из токена
+ * @returns {Promise<string|null>} ID пользователя или null при ошибке
+ */
+export const getUserIdFromKeycloak = async () => {
+    try {
+        await keycloak.updateToken(30);
+
+        if (!keycloak.tokenParsed) {
+            console.error('Токен не распознан');
+            return null;
+        }
+
+        if (!keycloak.tokenParsed.sub) {
+            console.error('ID пользователя не найден в токене');
+            return null;
+        }
+
+        return keycloak.tokenParsed.sub;
+    } catch (error) {
+        console.error('Ошибка получения ID пользователя:', error);
+        return null;
+    }
+};

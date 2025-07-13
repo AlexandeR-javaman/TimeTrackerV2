@@ -24,6 +24,8 @@ public class LogEntryDto {
 
     private LocalDateTime endTime;
 
+    private String keycloakId;
+
     private Long employeeId;
 
     private String message;

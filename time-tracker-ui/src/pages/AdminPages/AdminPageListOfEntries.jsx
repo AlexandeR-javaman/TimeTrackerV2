@@ -46,6 +46,7 @@ const AdminPageListOfEntries = () => {
                     columns={columns}
                     loadData={async () => {
                         const response = await fetchLogEntries();
+                        console.log("проверяем какие смены получили", response);
                         return response.map(item => ({
                             ...item,
                             jobTime: `${item.jobTime} ч.`,

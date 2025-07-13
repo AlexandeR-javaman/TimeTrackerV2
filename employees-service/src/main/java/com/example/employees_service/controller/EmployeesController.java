@@ -28,8 +28,8 @@ public class EmployeesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id) {
-        Optional<EmployeeDto> employeeDto = employeeService.findById(id);
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable String keycloak_id) {
+        Optional<EmployeeDto> employeeDto = employeeService.findById(keycloak_id);
         return employeeDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
