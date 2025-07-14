@@ -8,7 +8,7 @@ const EmployeePageStart = () => {
         <>
             <Navbar />
             <div className="content">
-                <h2 className="title">Добро пожаловать на страницу Юзера</h2>
+                <h2 className="title">Добро пожаловать на страницу пользователя</h2>
             </div>
         </>
     );

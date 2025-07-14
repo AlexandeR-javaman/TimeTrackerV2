@@ -8,7 +8,7 @@ const AdminPageStart = () => {
         <>
             <Navbar/>
             <div className="content">
-                <h2 className="title">Добро пожаловать на страницу Администратора</h2>
+                <h2 className="title">Добро пожаловать на страницу администратора</h2>
             </div>
         </>
     );

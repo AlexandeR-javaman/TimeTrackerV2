@@ -26,7 +26,6 @@ const StartLogButton = ({ onLogStarted }) => {
                 className={`${buttonStyles.logButton} ${isLoading ? buttonStyles.loading : ''}`}
                 onClick={handleStartLog}
                 disabled={isLoading}
-                // className={`start-log-button ${isLoading ? 'loading' : ''}`}
             >
                 {isLoading ? 'Запуск смены...' : 'Начать смену'}
             </button>

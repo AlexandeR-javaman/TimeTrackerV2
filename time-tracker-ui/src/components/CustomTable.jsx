@@ -63,7 +63,7 @@ const CustomTable = forwardRef(({ columns, loadData }, ref) => {
                         <td key={`filter-${col.key}`}>
                             <input
                                 type="text"
-                                placeholder={`Фильтр ${col.label}`}
+                                placeholder={`Фильтр: ${col.label}`}
                                 value={filters[col.key] || ''}
                                 onChange={(e) => handleFilterChange(col.key, e.target.value)}
                                 style={{ width: '100%' }}
