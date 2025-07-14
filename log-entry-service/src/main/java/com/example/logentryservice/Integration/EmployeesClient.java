@@ -23,7 +23,7 @@ public class EmployeesClient {
                     throw new RuntimeException("id not found");
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
-                    throw new RuntimeException("Server error");
+                    throw new RuntimeException("Server error in EmployeesClient " + id);
                 })
                 .body(EmployeeIDDto.class);
     }

@@ -23,7 +23,7 @@ public class LogEntriesController {
     private final LogEntryService logEntryService;
 
     @PostMapping("/start")
-    public ResponseEntity<StartResponse> startLogEntry(@RequestBody @Valid StartRequest request) {
+    public ResponseEntity<StartResponse> startLogEntry(@RequestBody StartRequest request) {
         Long logEntryId = logEntryService.startLogEntry(request);
         StartResponse response = new StartResponse(logEntryId);
         return ResponseEntity

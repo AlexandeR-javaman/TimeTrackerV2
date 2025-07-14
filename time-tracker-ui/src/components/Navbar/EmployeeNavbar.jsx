@@ -1,7 +1,7 @@
 import React from 'react';
 import NavButton from './NavButton';
 
-const EmployeeNavbar = ({ username, onLogout }) => {
+const EmployeeNavbar = () => {
     return (
         <div>
             <NavButton path="/employee/logentry" label="Мои смены" />

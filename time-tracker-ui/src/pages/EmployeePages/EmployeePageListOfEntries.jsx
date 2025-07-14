@@ -5,15 +5,8 @@ import { fetchLogEntriesByEmployee } from '../../api/logEntriesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
 
 const EmployeePageListOfEntries = () => {
-    const role = 'User';
-    const username = 'Петр Иванов';
-    const jwt = localStorage.getItem('token'); // или получить из контекста
+    const username = 'пользователя';
     const tableRef = useRef(null); // Создаем ref для таблицы
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-    };
 
     const columns = [
         { key: 'id', label: 'Номер смены', width: '5%' },
@@ -31,7 +24,7 @@ const EmployeePageListOfEntries = () => {
 
     return (
         <>
-            <Navbar role={role} username={username} onLogout={handleLogout} />
+            <Navbar />
             <div className="content">
                 <h2 className="table-title">Таблица смен из базы данных</h2>
                 <CustomTable
