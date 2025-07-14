@@ -2,6 +2,7 @@ import React, { useState }  from 'react';
 import PropTypes from 'prop-types';
 import { startLogEntry } from '../../api/logEntriesApi';
 import { useApiRequest } from '../../hooks/useApiRequest';
+import buttonStyles from './ButtonStyles.module.css';
 
 const StartLogButton = ({ onLogStarted }) => {
     const { isLoading, error, success, executeRequest } = useApiRequest();
@@ -22,9 +23,10 @@ const StartLogButton = ({ onLogStarted }) => {
     return (
         <div className="start-log-container">
             <button
+                className={`${buttonStyles.logButton} ${isLoading ? buttonStyles.loading : ''}`}
                 onClick={handleStartLog}
                 disabled={isLoading}
-                className={`start-log-button ${isLoading ? 'loading' : ''}`}
+                // className={`start-log-button ${isLoading ? 'loading' : ''}`}
             >
                 {isLoading ? 'Запуск смены...' : 'Начать смену'}
             </button>

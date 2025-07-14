@@ -22,5 +22,5 @@ export const useApiRequest = () => {
         }
     };
 
-    return { isLoading, error, success, executeRequest };
+    return { isLoading, error, success, executeRequest, setError };
 };

@@ -2,22 +2,25 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { endLogEntry } from '../../api/logEntriesApi';
 import { useApiRequest } from '../../hooks/useApiRequest';
+import formStyles from './FormStyles.module.css';
+import buttonStyles from './ButtonStyles.module.css';
 
 const EndLogButton = ({ onLogEnded }) => {
-    const { isLoading, error, success, executeRequest, setError } = useApiRequest();
+    const { isLoading, error, success, executeRequest } = useApiRequest();
     const [reportMessage, setReportMessage] = useState('');
     const [charCount, setCharCount] = useState(0);
+    const [validationError, setValidationError] = useState('');
 
     const handleEndLog = async () => {
         if (!reportMessage.trim()) {
-            setError('Пожалуйста, заполните отчет о смене');
+            setValidationError('Пожалуйста, заполните отчет о смене');
             return;
         }
 
         try {
             const result = await executeRequest(() => endLogEntry(reportMessage));
             setReportMessage(''); // Очищаем поле после успеха
-
+            setValidationError(''); // Очищаем ошибку при успехе
             if (onLogEnded) {
                 onLogEnded(result);
             }
@@ -31,28 +34,44 @@ const EndLogButton = ({ onLogEnded }) => {
         if (value.length <= 255) {
             setReportMessage(value);
             setCharCount(value.length);
+
+            // Сбрасываем ошибку валидации, если пользователь начал вводить текст
+            if (validationError && value.trim()) {
+                setValidationError('');
+            }
+
         }
     };
 
     return (
-        <div className="end-log-container">
-            <div className="report-input-container">
-                <label htmlFor="report-message">Отчет о смене:</label>
+        <div className={formStyles.endLogContainer}>
+            <div className={formStyles.reportInputContainer}>
+                <label
+                    htmlFor="report-message"
+                    className={formStyles.reportLabel}
+                >
+                    Отчет о смене:
+                </label>
                 <textarea
                     id="report-message"
+                    className={formStyles.reportTextarea}
                     value={reportMessage}
                     onChange={handleMessageChange}
                     placeholder="Опишите результаты работы за смену (макс. 255 символов)"
                     rows={4}
                     maxLength={255}
                 />
-                <div className="char-counter">{charCount}/255</div>
+                    <div className={formStyles.charCounter}>
+                        {charCount}/255
+                    </div>
             </div>
 
             <button
+                className={`${buttonStyles.logButton} ${isLoading ? buttonStyles.loading : ''}`}
                 onClick={handleEndLog}
                 disabled={isLoading || !reportMessage.trim()}
-                className={`end-log-button ${isLoading ? 'loading' : ''}`}
+                // disabled={isLoading}
+                // className={`end-log-button ${isLoading ? 'loading' : ''}`}
             >
                 {isLoading ? 'Завершение смены...' : 'Завершить смену'}
             </button>
@@ -61,6 +80,11 @@ const EndLogButton = ({ onLogEnded }) => {
                 <div className="success-message">
                     ✅ {success.message || 'Смена успешно завершена!'}
                 </div>
+            )}
+
+            {/* Выводим ошибку валидации */}
+            {validationError && (
+                <div className="error-message">❌ {validationError}</div>
             )}
 
             {error && (
