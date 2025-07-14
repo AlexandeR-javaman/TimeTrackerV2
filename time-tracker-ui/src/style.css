@@ -105,3 +105,25 @@ th {
 .export-button:hover {
     background-color: #218838; /* Темнее при наведении */
 }
+
+/* Для строки с фильтрами */
+.filter-row td {
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* Для полей ввода фильтров */
+.filter-row input {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: calc(100% - 2px); /* страховка */
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+/* Чтобы заголовки и фильтры визуально разделялись */
+thead tr:first-child th {
+    border-bottom: none;
+}
