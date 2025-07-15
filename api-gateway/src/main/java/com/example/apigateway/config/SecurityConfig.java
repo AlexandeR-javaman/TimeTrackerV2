@@ -61,8 +61,10 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .pathMatchers("/log_entry_service/**").permitAll()
-                        .pathMatchers("/employees_service/api/employees").hasRole("ADMIN")
-                        .pathMatchers("/employees_service/**").hasRole("ADMIN")
+//                        .pathMatchers("/employees_service/api/employees").hasRole("ADMIN")
+//                        .pathMatchers("/employees_service/**").hasRole("ADMIN")
+                        .pathMatchers("/employees_service/**").hasAuthority("ROLE_ADMIN")
+                        .pathMatchers("/employees_service/api/employees").hasAuthority("ROLE_ADMIN")
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

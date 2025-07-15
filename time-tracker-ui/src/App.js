@@ -17,6 +17,9 @@ import EmployeePageListOfEntries from "./pages/EmployeePages/EmployeePageListOfE
 import EmployeePageStartTime from "./pages/EmployeePages/EmployeePageStartTime";
 import EmployeePageEndTime from "./pages/EmployeePages/EmployeePageEndTime";
 
+// Nothing page
+import AccessDeniedPage from "./pages/AccessDeniedPage";
+
 function App() {
     return (
         <Routes>
@@ -40,7 +43,7 @@ function App() {
             </Route>
 
             {/* Fallback route */}
-            <Route path="*" element={<div>Страница не найдена</div>} />
+            <Route path="*" element={<AccessDeniedPage />} />
         </Routes>
     );
 }
