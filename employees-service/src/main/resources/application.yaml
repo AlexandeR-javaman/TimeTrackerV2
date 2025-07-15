@@ -27,8 +27,8 @@ keycloak:
   auth-server-url: http://localhost:8090
   realm: Employees_realm
   clientId: employee_service
-  userName: RealmClient
-  password: RealmClient
+  userName: realmclient
+  password: realmclient
 
 
 #logging:

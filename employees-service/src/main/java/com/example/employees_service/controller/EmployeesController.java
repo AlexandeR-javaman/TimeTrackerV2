@@ -28,7 +28,7 @@ public class EmployeesController {
     }
 
     @GetMapping("/{keycloakId}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable String keycloakId) {
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("keycloakId") String keycloakId) {
         Optional<EmployeeDto> employeeDto = employeeService.findById(keycloakId);
         return employeeDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }

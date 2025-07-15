@@ -403,8 +403,8 @@
       "id" : "280b903d-7f71-49db-9317-a9530fe3b9c0",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1752609562496,
-      "secretData" : "{\"value\":\"rXRiF3hkdojhNB8AWdielp5J45jSG22+I/1CyeOavNU=\",\"salt\":\"DLnEA4ziifYHOJMkqMnkgA==\",\"additionalParameters\":{}}",
+      "createdDate" : 1752614503634,
+      "secretData" : "{\"value\":\"A7ID0Q3j4m2rqR/oWr1j8tLkYXwkHFhQBgJjHcAvugs=\",\"salt\":\"2N+2e48qBt4+bf3nb09Jpg==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
@@ -1321,7 +1321,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-usermodel-attribute-mapper", "saml-user-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "saml-role-list-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "saml-user-property-mapper", "saml-user-attribute-mapper", "oidc-full-name-mapper", "saml-role-list-mapper" ]
       }
     }, {
       "id" : "0354a106-98fe-4179-a0c5-6ea67edcd468",
@@ -1347,7 +1347,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "oidc-usermodel-property-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "saml-role-list-mapper", "saml-user-property-mapper", "oidc-usermodel-attribute-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "saml-user-property-mapper", "oidc-address-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-role-list-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper" ]
       }
     }, {
       "id" : "6b2f63ec-7c6b-4bd6-a89e-e7d6341b7f1f",

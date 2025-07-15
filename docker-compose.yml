@@ -22,3 +22,50 @@ services:
     ports:
       - "8090:8080"
     command: start-dev --import-realm
+
+  employees-service:
+    container_name: Employees
+    build:
+      context: ./employees-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgresDb
+    environment:
+      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
+      - USER_DB=postgres1
+      - PASSWORD_DB=postgres1
+
+
+  log-entry-service:
+    container_name: LogEntries
+    build:
+      context: ./log-entry-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgresDb
+    environment:
+      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
+      - USER_DB=postgres1
+      - PASSWORD_DB=postgres1
+
+  api-gateway:
+    container_name: ApiGateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  frontend:
+    container_name: Frontend
+    build:
+      context: ./time-tracker-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
