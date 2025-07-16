@@ -24,7 +24,7 @@ server:
   port: 8081
 
 keycloak:
-  auth-server-url: http://localhost:8090
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080}
   realm: Employees_realm
   clientId: employee_service
   userName: realmclient
