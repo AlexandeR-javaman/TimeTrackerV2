@@ -35,3 +35,6 @@ spring:
 
 server:
   port: 8082
+
+integration:
+  employee-url: ${EMPLOYEE_URI:http://localhost:8081}

@@ -34,7 +34,7 @@ public class EmployeesController {
     }
 
     @GetMapping("/employeeEntry/{id}")
-    public ResponseEntity<EmployeeWithEntryDto> getEmployeeWithEntryById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeWithEntryDto> getEmployeeWithEntryById(@PathVariable("id") Long id) {
         EmployeeWithEntryDto response = employeeService.getEmployeeWithEntryById(id);
         return ResponseEntity
                 .status(HttpStatus.OK)

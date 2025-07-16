@@ -59,6 +59,7 @@ services:
       - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
       - USER_DB=postgres1
       - PASSWORD_DB=postgres1
+      - EMPLOYEE_URI=http://Employees:8081
 
   api-gateway:
     container_name: ApiGateway

@@ -1,6 +1,7 @@
 package com.example.logentryservice.Integration;
 
 import com.example.logentryservice.dto.EmployeeIDDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -9,9 +10,10 @@ import org.springframework.web.client.RestClient;
 public class EmployeesClient {
     private final RestClient restClient;
 
-    public EmployeesClient(RestClient.Builder builder) {
+    public EmployeesClient(RestClient.Builder builder,
+                           @Value("${integration.employee-url}") String employeeUrl) {
         this.restClient = builder
-                .baseUrl("http://localhost:8081")
+                .baseUrl(employeeUrl)
                 .build();
     }
 

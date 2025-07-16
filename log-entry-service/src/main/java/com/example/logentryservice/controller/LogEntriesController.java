@@ -40,7 +40,7 @@ public class LogEntriesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetLogEntriesByEmployeeIdResponse> getLogEntry(@PathVariable String id) {
+    public ResponseEntity<GetLogEntriesByEmployeeIdResponse> getLogEntry(@PathVariable("id") String id) {
         GetLogEntriesByEmployeeIdResponse response = logEntryService.getAllLogEntriesByEmployee(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
