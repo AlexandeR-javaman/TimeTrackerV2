@@ -48,9 +48,12 @@ services:
 
   log-entry-service:
     container_name: LogEntries
+#    build:
+#      context: ./log-entry-service
+#      dockerfile: Dockerfile
     build:
-      context: ./log-entry-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: log-entry-service/Dockerfile
     ports:
       - "8082:8082"
     depends_on:
