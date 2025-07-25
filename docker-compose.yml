@@ -20,14 +20,13 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_ENABLED: true
-#      KC_HOSTNAME: host.docker.internal
-#      KC_HOSTNAME: localhost
+      KC_HOSTNAME: localhost
       KC_HOSTNAME_STRICT: false
     volumes:
       - './config/keycloak/import:/opt/keycloak/data/import'
     command: start-dev --import-realm
 
-#Раскомментировать для запуска в контейнере:
+##Раскомментировать для запуска в контейнере:
 #  employees-service:
 #    container_name: Employees
 #    build:
@@ -41,12 +40,7 @@ services:
 #      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
 #      - USER_DB=postgres1
 #      - PASSWORD_DB=postgres1
-#      - AUTH_SERVER_URL=http://host.docker.internal:8080
-##      - AUTH_SERVER_URL=http://localhost:8080
-#    extra_hosts:
-##      - "localhost:host-gateway"
-#      - "host.docker.internal:host-gateway"
-#
+#      - AUTH_SERVER_URL=http://keycloak:8080
 #
 #  log-entry-service:
 #    container_name: LogEntries
@@ -76,7 +70,6 @@ services:
 #    environment:
 #      - FRONTEND_URI=http://localhost:3000
 #      - KEYCLOAK_URI=http://localhost:8080/realms/Employees_realm
-##      - KEYCLOAK_URI=http://host.docker.internal:8080/realms/Employees_realm
 #      - EMPLOYEES_SERVICE_URI=http://Employees:8081
 #      - LOG_ENTRY_SERVICE_URI=http://LogEntries:8082
 #    extra_hosts:
