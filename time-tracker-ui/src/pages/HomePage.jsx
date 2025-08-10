@@ -15,15 +15,31 @@ const HomePage = () => {
         if (initialized && keycloak.authenticated) {
             if (keycloak.hasRealmRole('ADMIN')) {
                 navigate('/admin');
-            } else {
+            } else if (keycloak.hasRealmRole('USER')) {
                 navigate('/employee');
+            }else {
+                navigate('/access-denied'); // путь к AccessDeniedPage
             }
         }
     }, [keycloak, navigate, initialized]);
 
     if (!initialized) {
-        return <div>Загрузка...</div>;
+        return <div>Загрузка страницы...</div>;
     }
+
+    // React.useEffect(() => {
+    //     if (initialized && keycloak.authenticated) {
+    //         if (keycloak.hasRealmRole('ADMIN')) {
+    //             navigate('/admin');
+    //         } else {
+    //             navigate('/employee');
+    //         }
+    //     }
+    // }, [keycloak, navigate, initialized]);
+    //
+    // if (!initialized) {
+    //     return <div>Загрузка...</div>;
+    // }
 
     return (
         <div style={{ textAlign: 'center', marginTop: '100px' }}>

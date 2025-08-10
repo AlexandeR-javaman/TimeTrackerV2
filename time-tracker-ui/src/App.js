@@ -19,6 +19,7 @@ import EmployeePageEndTime from "./pages/EmployeePages/EmployeePageEndTime";
 
 // Nothing page
 import AccessDeniedPage from "./pages/AccessDeniedPage";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
     return (
@@ -43,7 +44,8 @@ function App() {
             </Route>
 
             {/* Fallback route */}
-            <Route path="*" element={<AccessDeniedPage />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/access-denied" element={<AccessDeniedPage />} />
         </Routes>
     );
 }
