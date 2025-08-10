@@ -7,15 +7,37 @@ const HomePage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleLogin = () => {
+    const checkKeycloakAvailability = async () => {
+        const url = `${process.env.REACT_APP_KEYCLOAK_URL}/realms/${process.env.REACT_APP_KEYCLOAK_REALM}/.well-known/openid-configuration`;
+        try {
+            const response = await fetch(url, { method: 'GET', mode: 'cors' });
+            if (!response.ok) {
+                throw new Error('Keycloak недоступен');
+            }
+            return true;
+        } catch (err) {
+            return false;
+        }
+    };
+
+    const handleLogin = async () => {
         setLoading(true);
         setError(null);
 
-        keycloak.login()
-            .catch(() => {
-                setError('Невозможно подключиться к серверу аутентификации');
-                setLoading(false);
-            });
+        const available = await checkKeycloakAvailability();
+        if (!available) {
+            setError('Невозможно подключиться к серверу аутентификации');
+            setLoading(false);
+            return;
+        }
+
+        // Если сервер доступен — вызываем login
+        try {
+            await keycloak.login();
+        } catch (err) {
+            setError('Ошибка при попытке входа');
+            setLoading(false);
+        }
     };
 
     return (
