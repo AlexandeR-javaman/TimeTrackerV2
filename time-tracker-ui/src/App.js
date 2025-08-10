@@ -44,6 +44,7 @@ function App() {
 
             {/* Fallback route */}
             <Route path="*" element={<AccessDeniedPage />} />
+            <Route path="/accessdenied" element={<AccessDeniedPage />} />
         </Routes>
     );
 }

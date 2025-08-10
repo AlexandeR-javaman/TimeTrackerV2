@@ -15,25 +15,36 @@ const HomePage = () => {
         if (initialized && keycloak.authenticated) {
             if (keycloak.hasRealmRole('ADMIN')) {
                 navigate('/admin');
-            } else {
+            } else if (keycloak.hasRealmRole('USER')) {
                 navigate('/employee');
+            }else {
+                navigate('/accessdenied'); // путь к AccessDeniedPage
             }
         }
     }, [keycloak, navigate, initialized]);
 
     if (!initialized) {
-        return <div>Загрузка...</div>;
+            return <div>Загрузка...</div>;
+        }
+
+    // Если инициализация прошла, но пользователь НЕ аутентифицирован — показываем кнопку входа
+    if (!keycloak.authenticated) {
+        return (
+            <div style={{ textAlign: 'center', marginTop: '100px' }}>
+                <h1>Добро пожаловать в систему учета рабочего времени!</h1>
+                <button className={buttonStyles.logButton} onClick={handleLogin}>
+                    Войти
+                </button>
+            </div>
+        );
     }
 
-    return (
-        <div style={{ textAlign: 'center', marginTop: '100px' }}>
-            <h1>Добро пожаловать в систему учета рабочего времени!</h1>
-            <button
-                className={buttonStyles.logButton}
-                onClick={handleLogin}>Войти</button>
-        </div>
-    );
+    // Если пользователь аутентифицирован, но useEffect ещё не сработал, можно показать что-то нейтральное
+    return <div>Подготовка к перенаправлению...</div>;
 };
+
+export default HomePage;
+
 //     return (
 //     <div style={{ textAlign: 'center', marginTop: '100px' }}>
 //         <h1>Добро пожаловать в систему учета</h1>
@@ -44,4 +55,4 @@ const HomePage = () => {
 //     </div>
 // );
 
-export default HomePage;
+// export default HomePage;

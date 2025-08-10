@@ -3,13 +3,16 @@ import EmployeeNavbar from './EmployeeNavbar';
 import NavButton from './NavButton';
 import React, {useEffect, useState} from "react";
 import keycloak from '../../keycloak';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Navbar = () => {
     const [role, setRole] = useState('');
     const [username, setUsername] = useState('');
 
+    const { keycloak, initialized } = useKeycloak();
+
     useEffect(() => {
-        if (!keycloak.authenticated || !keycloak.tokenParsed) return;
+        if (!initialized || !keycloak.authenticated || !keycloak.tokenParsed) return;
         const roles = keycloak.tokenParsed?.realm_access?.roles || [];
         // Определяем роль вручную по приоритету
         let selectedRole = '';
@@ -45,6 +48,10 @@ const Navbar = () => {
             redirectUri: window.location.origin
         });
     };
+
+    if (!initialized) {
+        return null; // или какой-то спиннер
+    }
 
     return (
         <nav className="navbar">
