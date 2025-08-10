@@ -1,15 +1,12 @@
 import React from 'react';
-import { useKeycloak } from '@react-keycloak/web';
+import { useNavigate } from 'react-router-dom';
 import buttonStyles from '../components/StartEndButton/ButtonStyles.module.css';
-import keycloak from "../keycloak";
 
-const AccessDeniedPage = () => {
-    const { keycloak } = useKeycloak();
+const PageNotFound = () => {
+    const navigate = useNavigate();
 
-    const handleLogout = () => {
-        keycloak.logout({
-            redirectUri: window.location.origin
-        });
+    const handleGoToStart = () => {
+        navigate('/'); // Перенаправление на корневой маршрут (первую страницу)
     };
 
     return (
@@ -17,9 +14,11 @@ const AccessDeniedPage = () => {
             <h1>Страница не найдена</h1>
             <button
                 className={buttonStyles.logButton}
-                onClick={handleLogout}>Выйти</button>
+                onClick={handleGoToStart}>
+                В начало
+            </button>
         </div>
     );
 };
 
-export default AccessDeniedPage;
+export default PageNotFound;
