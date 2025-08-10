@@ -8,7 +8,14 @@ const HomePage = () => {
     const [error, setError] = useState(null);
 
     const handleLogin = () => {
-        keycloak.login();
+        setLoading(true);
+        setError(null);
+
+        keycloak.login()
+            .catch(() => {
+                setError('Невозможно подключиться к серверу аутентификации');
+                setLoading(false);
+            });
     };
 
     return (
