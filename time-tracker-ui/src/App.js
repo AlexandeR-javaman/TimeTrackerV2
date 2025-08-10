@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import './style.css';
 import { AdminLayout } from './components/layouts/AdminLayout';
 import { EmployeeLayout } from './components/layouts/EmployeeLayout';
+import {ProtectedLayout} from "./components/layouts/ProtectedLayout";
 
 // Admin pages
 import AdminPageStart from "./pages/AdminPages/AdminPageStart";
@@ -17,7 +18,7 @@ import EmployeePageListOfEntries from "./pages/EmployeePages/EmployeePageListOfE
 import EmployeePageStartTime from "./pages/EmployeePages/EmployeePageStartTime";
 import EmployeePageEndTime from "./pages/EmployeePages/EmployeePageEndTime";
 
-// Nothing page
+// Nothing pages
 import AccessDeniedPage from "./pages/AccessDeniedPage";
 import PageNotFound from "./pages/PageNotFound";
 
@@ -28,7 +29,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
 
             {/* Admin routes */}
-            <Route element={<AdminLayout />}>
+            <Route element={<ProtectedLayout roles={['ADMIN']} />}>
                 <Route path="/admin" element={<AdminPageStart />} />
                 <Route path="/admin/employees" element={<AdminPageListOfEmployees />} />
                 <Route path="/admin/logentry" element={<AdminPageListOfEntries />} />
@@ -36,7 +37,7 @@ function App() {
             </Route>
 
             {/* Employee routes */}
-            <Route element={<EmployeeLayout />}>
+            <Route element={<ProtectedLayout roles={['USER']} />}>
                 <Route path="/employee" element={<EmployeePageStart />} />
                 <Route path="/employee/logentry" element={<EmployeePageListOfEntries />} />
                 <Route path="/employee/startTime" element={<EmployeePageStartTime />} />
