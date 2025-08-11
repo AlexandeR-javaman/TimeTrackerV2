@@ -60,15 +60,19 @@ const CustomTable = forwardRef(({ columns, loadData }, ref) => {
                 {/* Строка с фильтрами */}
                 <tr className="filter-row">
                     {columns.map(col => (
-                        <td key={`filter-${col.key}`}>
-                            <input
-                                type="text"
-                                placeholder={`Фильтр: ${col.label}`}
-                                value={filters[col.key] || ''}
-                                onChange={(e) => handleFilterChange(col.key, e.target.value)}
-                                style={{ width: '100%' }}
-                            />
-                        </td>
+                        col.key === 'actions' ? (
+                            <td key={`filter-${col.key}`}></td>
+                        ) : (
+                            <td key={`filter-${col.key}`}>
+                                <input
+                                    type="text"
+                                    placeholder={`Фильтр: ${col.label}`}
+                                    value={filters[col.key] || ''}
+                                    onChange={(e) => handleFilterChange(col.key, e.target.value)}
+                                    style={{ width: '100%' }}
+                                />
+                            </td>
+                        )
                     ))}
                 </tr>
                 </thead>
