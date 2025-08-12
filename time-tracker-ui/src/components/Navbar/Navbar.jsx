@@ -9,7 +9,11 @@ const Navbar = () => {
     const [username, setUsername] = useState('');
 
     useEffect(() => {
-        if (!keycloak.authenticated || !keycloak.tokenParsed) return;
+        if (!keycloak.authenticated || !keycloak.tokenParsed) {
+            setRole('');
+            setUsername('');
+            return;
+        }
         const roles = keycloak.tokenParsed?.realm_access?.roles || [];
         // Определяем роль вручную по приоритету
         let selectedRole = '';
@@ -26,7 +30,7 @@ const Navbar = () => {
         setUsername(fullName);
 
         console.log("Парсим токен для Role", roles);
-    }, []);
+    }, [keycloak.authenticated, keycloak.tokenParsed]);
 
     const rolePaths = {
         ADMIN: '/admin',
@@ -45,6 +49,15 @@ const Navbar = () => {
             redirectUri: window.location.origin
         });
     };
+
+    // с этим условием еще разобраться
+    if (!keycloak.authenticated || !role) {
+        return (
+            <nav className="navbar">
+                <button onClick={() => keycloak.login()}>Войти</button>
+            </nav>
+        );
+    }
 
     return (
         <nav className="navbar">
