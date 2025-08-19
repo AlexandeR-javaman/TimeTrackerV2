@@ -10,6 +10,7 @@ import org.springframework.web.client.RestClient;
 public class EmployeesClient {
     private final RestClient restClient;
 
+    //todo проверка туду
     public EmployeesClient(RestClient.Builder builder,
                            @Value("${integration.employee-url}") String employeeUrl) {
         this.restClient = builder

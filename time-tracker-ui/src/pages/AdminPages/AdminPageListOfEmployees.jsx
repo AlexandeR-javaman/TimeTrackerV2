@@ -1,19 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import CustomTable from '../../components/CustomTable';
-import { fetchEmployees } from '../../api/employeesApi';
+import EditEmployeeModal from '../../components/EditEmployeeModal';
+import {fetchEmployees, updateEmployee} from '../../api/employeesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
 
 const AdminPageListOfEmployees = () => {
 
     const tableRef = useRef(null); // Создаем ref для таблицы
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-    // Функция для обработки редактирования сотрудника
-    const handleEditEmployee = (id) => {
-        // Здесь можно открыть модальное окно или перейти на страницу редактирования
-        console.log('Редактировать сотрудника с ID:', id);
-        // Или отправить запрос на бекенд:
-        // editEmployee(employeeId, newData).then(...)
+    // Функция для открытия модального окна
+    const handleEditEmployee = (employee) => {
+        console.log('Редактируемый сотрудник:', employee);
+        setSelectedEmployee(employee);
+        setIsModalOpen(true);
+    };
+
+    // Функция для сохранения изменений
+    const handleSaveEmployee = async (id, updatedData) => {
+        try {
+            await updateEmployee(id, updatedData);
+            setIsModalOpen(false);
+            setSelectedEmployee(null);
+
+            // Обновляем таблицу после сохранения
+            if (tableRef.current && tableRef.current.refresh) {
+                tableRef.current.refresh();
+            }
+
+            alert('Данные сотрудника успешно обновлены!');
+        } catch (error) {
+            console.error('Ошибка при обновлении сотрудника:', error);
+            alert('Произошла ошибка при обновлении данных');
+        }
+    };
+
+    // Функция для закрытия модального окна
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedEmployee(null);
     };
 
     const columns = [
@@ -29,7 +56,7 @@ const AdminPageListOfEmployees = () => {
             width: '10%',
             render: (value, row) => (
                 <button
-                    onClick={() => handleEditEmployee(row.id)}
+                    onClick={() => handleEditEmployee(row)}
                     className="edit-button"
                 >
                     Редактировать
@@ -61,6 +88,12 @@ const AdminPageListOfEmployees = () => {
                         Выгрузить
                     </button>
                 </div>
+                <EditEmployeeModal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    employee={selectedEmployee}
+                    onSave={handleSaveEmployee}
+                />
             </div>
         </>
     );

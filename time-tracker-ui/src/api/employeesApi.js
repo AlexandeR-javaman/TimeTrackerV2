@@ -38,3 +38,24 @@ export const registerEmployee = async (employee) => {
         handleApiError(error);
     }
 };
+
+export const updateEmployee = async (id, updatedData) => {
+    try {
+        const response = await fetch(`/api/employees/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка при обновлении сотрудника');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating employee:', error);
+        throw error;
+    }
+};
