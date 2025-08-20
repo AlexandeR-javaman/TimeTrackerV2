@@ -41,21 +41,40 @@ export const registerEmployee = async (employee) => {
 
 export const updateEmployee = async (id, updatedData) => {
     try {
-        const response = await fetch(`/api/employees/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData),
-        });
-
-        if (!response.ok) {
-            throw new Error('Ошибка при обновлении сотрудника');
-        }
-
-        return await response.json();
+        const token = await getValidToken();
+        const response = await axios.patch(
+            `${API_URL}${EMPLOYEE_PATH}/api/employees/${id}`,
+            updatedData,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        return response.data;
     } catch (error) {
-        console.error('Error updating employee:', error);
-        throw error;
+        handleApiError(error);
     }
 };
+
+// export const updateEmployee = async (id, updatedData) => {
+//     try {
+//         const response = await fetch(`/api/employees/${id}`, {
+//             method: 'PUT',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify(updatedData),
+//         });
+//
+//         if (!response.ok) {
+//             throw new Error('Ошибка при обновлении сотрудника');
+//         }
+//
+//         return await response.json();
+//     } catch (error) {
+//         console.error('Error updating employee:', error);
+//         throw error;
+//     }
+// };

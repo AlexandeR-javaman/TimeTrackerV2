@@ -1,10 +1,7 @@
 package com.example.employees_service.service;
 
 import com.example.employees_service.Integration.LogEntryClient;
-import com.example.employees_service.dto.EmployeeCreateUpdateDto;
-import com.example.employees_service.dto.EmployeeDto;
-import com.example.employees_service.dto.EmployeeWithEntryDto;
-import com.example.employees_service.dto.LogEntryDto;
+import com.example.employees_service.dto.*;
 import com.example.employees_service.model.Employee;
 import com.example.employees_service.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +80,7 @@ public class EmployeeService {
 //                .build();
 //    }
 
-    public EmployeeDto save(EmployeeCreateUpdateDto dto) {
+    public EmployeeDto save(EmployeeCreateDto dto) {
         // 👇 Добавляем в Keycloak
         String userId = keycloakUserService.createUser(
                 dto.getLogin(),
@@ -117,31 +114,35 @@ public class EmployeeService {
                 .build();
     }
 
-    public EmployeeDto update(EmployeeCreateUpdateDto employeeDTO, Long id) {
+    public EmployeeDto update(EmployeeUpdateDto employeeDTO, Long id) {
         return employeeRepository.findById(id)
                 .map(foundEmployee -> {
-                    foundEmployee.setSurname(employeeDTO.getSurname());
-                    foundEmployee.setName(employeeDTO.getName());
-                    foundEmployee.setPatronymic(employeeDTO.getPatronymic());
-                    foundEmployee.setStuffId(employeeDTO.getStuffId());
-                    foundEmployee.setEmployeePost(employeeDTO.getEmployeePost());
-                    foundEmployee.setRole(employeeDTO.getRole());
-                    foundEmployee.setLogin(employeeDTO.getLogin());
-//                    foundEmployee.setPassword(employeeDTO.getPassword());
+                    applyUpdates(foundEmployee, employeeDTO);
                     Employee updatedEmployee = employeeRepository.save(foundEmployee);
-//                    return employeesMapper.entityToDto(updatedEmployee);
-                    return EmployeeDto.builder()
-                            .id(updatedEmployee.getId())
-                            .surname(updatedEmployee.getSurname())
-                            .name(updatedEmployee.getName())
-                            .patronymic(updatedEmployee.getPatronymic())
-                            .stuffId(updatedEmployee.getStuffId())
-                            .employeePost(updatedEmployee.getEmployeePost())
-                            .role(updatedEmployee.getRole())
-                            .date(LocalDate.now())
-                            .build();
+                    return mapToDto(updatedEmployee);
                 })
                 .orElse(null);
+    }
+
+    private void applyUpdates(Employee employee, EmployeeUpdateDto dto) {
+        if (dto.surname() != null) employee.setSurname(dto.surname());
+        if (dto.name() != null) employee.setName(dto.name());
+        if (dto.patronymic() != null) employee.setPatronymic(dto.patronymic());
+        if (dto.stuffId() != null) employee.setStuffId(dto.stuffId());
+        if (dto.employeePost() != null) employee.setEmployeePost(dto.employeePost());
+    }
+
+    private EmployeeDto mapToDto(Employee employee) {
+        return EmployeeDto.builder()
+                .id(employee.getId())
+                .surname(employee.getSurname())
+                .name(employee.getName())
+                .patronymic(employee.getPatronymic())
+                .stuffId(employee.getStuffId())
+                .employeePost(employee.getEmployeePost())
+                .role(employee.getRole())
+                .date(LocalDate.now())
+                .build();
     }
 
     public boolean deleteById(Long id) {

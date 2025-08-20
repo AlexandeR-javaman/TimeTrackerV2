@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeCreateUpdateDto {
+public class EmployeeCreateDto {
 // Для update лучше создать отдельный ДТО и в нем сделать несколько методов для апдейта каждого поля
  //   private Long id;
 

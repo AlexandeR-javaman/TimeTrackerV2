@@ -1,7 +1,8 @@
 package com.example.employees_service.controller;
 
-import com.example.employees_service.dto.EmployeeCreateUpdateDto;
+import com.example.employees_service.dto.EmployeeCreateDto;
 import com.example.employees_service.dto.EmployeeDto;
+import com.example.employees_service.dto.EmployeeUpdateDto;
 import com.example.employees_service.dto.EmployeeWithEntryDto;
 import com.example.employees_service.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -42,17 +43,17 @@ public class EmployeesController {
     }
 
     @PostMapping()
-    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeCreateUpdateDto createEmployeeDTO) {
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeCreateDto createEmployeeDTO) {
         EmployeeDto createdEmployee = employeeService.save(createEmployeeDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(createdEmployee);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeCreateUpdateDto updateEmployeeDTO,
+    @PatchMapping("/{id}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeUpdateDto updateEmployeeDto,
                                                       @PathVariable Long id) {
-        EmployeeDto updatedEmployee = employeeService.update(updateEmployeeDTO, id);
+        EmployeeDto updatedEmployee = employeeService.update(updateEmployeeDto, id);
         return updatedEmployee != null ? ResponseEntity.status(HttpStatus.OK).body(updatedEmployee) : ResponseEntity.notFound().build();
     }
 
