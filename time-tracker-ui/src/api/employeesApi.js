@@ -52,6 +52,7 @@ export const updateEmployee = async (id, updatedData) => {
                 },
             }
         );
+        console.log('отправляем данные на сервер:', updatedData);
         return response.data;
     } catch (error) {
         handleApiError(error);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import Portal from './Portal';
 import ConfirmModal from './ConfirmModal';
 import './EditEmployeeModal.css';
@@ -56,6 +56,18 @@ const EditEmployeeModal = ({
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        // Специальная обработка для числового поля
+        if (name === 'stuffId') {
+            // Разрешаем только цифры
+            if (/^\d+$/.test(value)) {
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
+            return;
+        }
+        // Для остальных полей обычная обработка
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -66,12 +78,19 @@ const EditEmployeeModal = ({
     const hasChanges = () => {
         if (!employee) return false;
 
+        const normalize = (value) => {
+            if (value === null || value === undefined) return '';
+            // Для числовых значений приводим к числу и обратно к строке
+            if (!isNaN(value)) return Number(value).toString();
+            return String(value);
+        };
+
         return (
-            formData.surname !== employee.surname ||
-            formData.name !== employee.name ||
-            formData.patronymic !== employee.patronymic ||
-            formData.stuffId !== employee.stuffId ||
-            formData.employeePost !== employee.employeePost
+            normalize(formData.surname) !== normalize(employee.surname) ||
+            normalize(formData.name) !== normalize(employee.name) ||
+            normalize(formData.patronymic) !== normalize(employee.patronymic) ||
+            normalize(formData.stuffId) !== normalize(employee.stuffId) ||
+            normalize(formData.employeePost) !== normalize(employee.employeePost)
         );
     };
 
@@ -86,9 +105,41 @@ const EditEmployeeModal = ({
         setShowConfirm(true);
     };
 
+    // Функция для получения измененных полей
+    const getChangedFields = useCallback(() => {
+        if (!employee) return {};
+
+        const changes = {};
+
+        if (String(formData.surname).trim() !== String(employee.surname).trim()) {
+            changes.surname = formData.surname;
+        }
+        if (String(formData.name).trim() !== String(employee.name).trim()) {
+            changes.name = formData.name;
+        }
+        if (String(formData.patronymic).trim() !== String(employee.patronymic).trim()) {
+            changes.patronymic = formData.patronymic;
+        }
+        if (String(formData.stuffId) !== String(employee.stuffId)) {
+            changes.stuffId = Number(formData.stuffId);
+        }
+        if (String(formData.employeePost).trim() !== String(employee.employeePost).trim()) {
+            changes.employeePost = formData.employeePost;
+        }
+
+        return changes;
+    }, [formData, employee]);
+
     const handleConfirmSave = () => {
-        console.log('Сохраняем данные:', formData);
-        onSave(employee.id, formData);
+        // const dataToSave = {
+        //     ...formData,
+        //     stuffId: Number(formData.stuffId) // явное преобразование в число
+        // };
+
+        const changes = getChangedFields();
+
+        console.log('Отправляем только изменения:', changes);
+        onSave(employee.id, changes);
         setShowConfirm(false);
     };
 
@@ -118,7 +169,7 @@ const EditEmployeeModal = ({
                                 ${employee.patronymic ? employee.patronymic[0] + '.' : ''}`
                                 :''
                             }
-  </span>
+                            </span>
                         </h3>
                         <button className="modal-close" onClick={onClose}>×</button>
                     </div>
@@ -130,67 +181,71 @@ const EditEmployeeModal = ({
                                 <input
                                     type="text"
                                     name="surname"
-                                value={formData.surname}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
+                                    value={formData.surname}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Имя:</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Имя:</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Отчество:</label>
-                            <input
-                                type="text"
-                                name="patronymic"
-                                value={formData.patronymic}
-                                onChange={handleInputChange}
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Отчество:</label>
+                                <input
+                                    type="text"
+                                    name="patronymic"
+                                    value={formData.patronymic}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Табельный номер:</label>
-                            <input
-                                type="text"
-                                name="stuffId"
-                                value={formData.stuffId}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Табельный номер:</label>
+                                <input
+                                    type="text"
+                                    name="stuffId"
+                                    value={formData.stuffId}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Должность:</label>
-                            <input
-                                type="text"
-                                name="employeePost"
-                                value={formData.employeePost}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Должность:</label>
+                                <input
+                                    type="text"
+                                    name="employeePost"
+                                    value={formData.employeePost}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
 
-                        <div className="modal-actions">
-                            <button type="button" onClick={onClose} className="cancel-button">
-                                Отмена
-                            </button>
-                            <button type="submit" className="save-button">
-                                Сохранить
-                            </button>
-                        </div>
-                    </form>
-                    ) : (
+                            <div className="modal-actions">
+                                <button type="button" onClick={onClose} className="cancel-button">
+                                    Отмена
+                                </button>
+                                <button
+                                    type="submit"
+                                    className={`save-button ${!hasChanges() ? 'save-button--disabled' : ''}`}
+                                    disabled={!hasChanges()}
+                                >
+                                    Сохранить
+                                </button>
+                            </div>
+                        </form>
+                        ) : (
                         <div>Загрузка данных...</div>
-                    )}
+                        )}
                 </div>
             </div>
         </Portal>

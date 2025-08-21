@@ -140,8 +140,30 @@
     transition: background-color 0.2s ease;
 }
 
-.save-button:hover {
+.save-button:hover:not(:disabled) {
     background: #229954;
+    transform: translateY(-1px);
+}
+
+.save-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/*.save-button:disabled {*/
+/*    background-color: #ccc;*/
+/*    cursor: not-allowed;*/
+/*    opacity: 0.6;*/
+/*}*/
+
+.save-button--disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.save-button--disabled:hover {
+    background-color: #ccc;
+    transform: none;
 }
 
 /* Адаптивность для мобильных устройств */

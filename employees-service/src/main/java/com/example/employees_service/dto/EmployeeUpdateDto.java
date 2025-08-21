@@ -1,8 +1,11 @@
 package com.example.employees_service.dto;
 
-public record EmployeeUpdateDto(String surname,
-                                String name,
-                                String patronymic,
-                                Long stuffId,
-                                String employeePost) {
+import org.springframework.lang.Nullable;
+
+public record EmployeeUpdateDto(
+        @Nullable String surname,
+        @Nullable String name,
+        @Nullable String patronymic,
+        @Nullable Long stuffId,
+        @Nullable String employeePost) {
 }
