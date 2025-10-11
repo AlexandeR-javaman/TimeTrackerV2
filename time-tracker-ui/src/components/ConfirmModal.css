@@ -74,3 +74,31 @@
 .confirm-ok:hover {
     background: #229954;
 }
+
+.confirm-ok--danger {
+    background: #e74c3c; /* красный */
+}
+
+.confirm-ok--danger:hover {
+    background: #c0392b; /* темно-красный при наведении */
+}
+
+.confirm-error {
+    color: #d32f2f;
+    background-color: #ffebee;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.confirm-success {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+    border: 1px solid #4caf50;
+    border-radius: 4px;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+}

@@ -20,20 +20,30 @@ const AdminPageListOfEmployees = () => {
 
     // Функция для сохранения изменений
     const handleSaveEmployee = async (id, updatedData) => {
-        try {
-            await updateEmployee(id, updatedData);
-            setIsModalOpen(false);
-            setSelectedEmployee(null);
+        // Если надо ошибку выводить в alert
+        // try {
+        //     await updateEmployee(id, updatedData);
+        //     setIsModalOpen(false);
+        //     setSelectedEmployee(null);
+        //
+        //     // Обновляем таблицу после сохранения
+        //     if (tableRef.current && tableRef.current.refresh) {
+        //         tableRef.current.refresh();
+        //     }
+        //
+        //     alert('Данные сотрудника успешно обновлены!');
+        // } catch (error) {
+        //     console.error('Ошибка при обновлении сотрудника:', error);
+        //     alert('Произошла ошибка при обновлении данных');
+        // }
 
-            // Обновляем таблицу после сохранения
-            if (tableRef.current && tableRef.current.refresh) {
-                tableRef.current.refresh();
-            }
+        await updateEmployee(id, updatedData);
+        // setIsModalOpen(false);
+        // setSelectedEmployee(null);
 
-            alert('Данные сотрудника успешно обновлены!');
-        } catch (error) {
-            console.error('Ошибка при обновлении сотрудника:', error);
-            alert('Произошла ошибка при обновлении данных');
+        // Обновляем таблицу после сохранения
+        if (tableRef.current && tableRef.current.refresh) {
+            tableRef.current.refresh();
         }
     };
 

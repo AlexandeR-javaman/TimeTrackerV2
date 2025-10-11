@@ -103,13 +103,51 @@
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
+/*.modal-actions {*/
+/*    display: flex;*/
+/*    justify-content: flex-end;*/
+/*    gap: 15px;*/
+/*    margin-top: 30px;*/
+/*    padding-top: 20px;*/
+/*    border-top: 2px solid #f0f0f0;*/
+/*}*/
+
 .modal-actions {
     display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.left-actions {
+    flex: 1;
+}
+
+.right-actions {
+    display: flex;
+    gap: 10px;
     justify-content: flex-end;
-    gap: 15px;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px solid #f0f0f0;
+}
+
+.delete-button {
+    padding: 12px 24px;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    background: white;
+    color: #e74c3c;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+    background: #e74c3c;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.delete-button:active {
+    transform: translateY(0);
 }
 
 .cancel-button {

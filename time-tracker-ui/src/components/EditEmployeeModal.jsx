@@ -2,12 +2,14 @@ import React, {useState, useEffect, useCallback} from 'react';
 import Portal from './Portal';
 import ConfirmModal from './ConfirmModal';
 import './EditEmployeeModal.css';
+import {useBodyScrollLock} from "../hooks/useBodyScrollLock";
 
 const EditEmployeeModal = ({
                                isOpen,
                                onClose,
                                employee,
-                               onSave
+                               onSave,
+                               onDelete
                            }) => {
     const [formData, setFormData] = useState({
         surname: '',
@@ -18,28 +20,30 @@ const EditEmployeeModal = ({
     });
 
     const [showConfirm, setShowConfirm] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     // Эффект для блокировки прокрутки body при открытом модальном окне
-    useEffect(() => {
-        if (isOpen) {
-            // Сохраняем текущее положение прокрутки
-            const scrollY = window.scrollY;
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.width = '100%';
-            document.body.style.overflow = 'hidden';
-
-            return () => {
-                // Восстанавливаем прокрутку при закрытии
-                const scrollY = parseInt(document.body.style.top || '0');
-                document.body.style.position = '';
-                document.body.style.top = '';
-                document.body.style.width = '';
-                document.body.style.overflow = '';
-                window.scrollTo(0, Math.abs(scrollY));
-            };
-        }
-    }, [isOpen]);
+    // useEffect(() => {
+    //     if (isOpen) {
+    //         // Сохраняем текущее положение прокрутки
+    //         const scrollY = window.scrollY;
+    //         document.body.style.position = 'fixed';
+    //         document.body.style.top = `-${scrollY}px`;
+    //         document.body.style.width = '100%';
+    //         document.body.style.overflow = 'hidden';
+    //
+    //         return () => {
+    //             // Восстанавливаем прокрутку при закрытии
+    //             const scrollY = parseInt(document.body.style.top || '0');
+    //             document.body.style.position = '';
+    //             document.body.style.top = '';
+    //             document.body.style.width = '';
+    //             document.body.style.overflow = '';
+    //             window.scrollTo(0, Math.abs(scrollY));
+    //         };
+    //     }
+    // }, [isOpen]);
+    useBodyScrollLock(isOpen);
 
     // Заполняем форму данными сотрудника при открытии
     useEffect(() => {
@@ -130,7 +134,7 @@ const EditEmployeeModal = ({
         return changes;
     }, [formData, employee]);
 
-    const handleConfirmSave = () => {
+    const handleConfirmSave = async () => {
         // const dataToSave = {
         //     ...formData,
         //     stuffId: Number(formData.stuffId) // явное преобразование в число
@@ -138,14 +142,31 @@ const EditEmployeeModal = ({
 
         const changes = getChangedFields();
 
-        console.log('Отправляем только изменения:', changes);
-        onSave(employee.id, changes);
-        setShowConfirm(false);
+        // console.log('Отправляем только изменения:', changes);
+        // onSave(employee.id, changes);
+        // setShowConfirm(false);
+        await onSave(employee.id, changes);
+        // setShowConfirm(false);
+        // onClose();
+    };
+
+    const handleSuccess = () => {
+        onClose(); // Закрываем основное модальное окно только после успеха
     };
 
     const handleCancelConfirm = () => {
         setShowConfirm(false);
     };
+
+    const handleDeleteClick = () => setShowDeleteConfirm(true);
+
+    const handleConfirmDelete = () => {
+        if (onDelete) onDelete(employee.id);
+        setShowDeleteConfirm(false);
+        onClose();
+    };
+
+    const handleCancelDelete = () => setShowDeleteConfirm(false);
 
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -229,36 +250,80 @@ const EditEmployeeModal = ({
                                     required
                                 />
                             </div>
-
                             <div className="modal-actions">
-                                <button type="button" onClick={onClose} className="cancel-button">
-                                    Отмена
-                                </button>
-                                <button
-                                    type="submit"
-                                    className={`save-button ${!hasChanges() ? 'save-button--disabled' : ''}`}
-                                    disabled={!hasChanges()}
-                                >
-                                    Сохранить
-                                </button>
+                                <div className="left-actions">
+                                    <button
+                                        type="button"
+                                        className="delete-button"
+                                        onClick={handleDeleteClick}
+                                        // стандартное окно подтверждения удаления:
+                                        // onClick={() => {
+                                        //     if (window.confirm('Вы уверены, что хотите удалить этого тупого сотрудника?')) {
+                                        //         // тут можно вызвать отдельный проп onDelete(employee.id)
+                                        //         console.log('Удаляем сотрудника с ID:', employee.id);
+                                        //     }
+                                        // }}
+                                    >
+                                        Удалить сотрудника
+                                    </button>
+                                </div>
+
+                                <div className="right-actions">
+                                    <button type="button" onClick={onClose} className="cancel-button">
+                                        Отмена
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className={`save-button ${!hasChanges() ? 'save-button--disabled' : ''}`}
+                                        disabled={!hasChanges()}
+                                    >
+                                        Сохранить
+                                    </button>
+                                </div>
                             </div>
+
+                            {/*<div className="modal-actions">*/}
+                            {/*    <button type="button" onClick={onClose} className="cancel-button">*/}
+                            {/*        Отмена*/}
+                            {/*    </button>*/}
+                            {/*    <button*/}
+                            {/*        type="submit"*/}
+                            {/*        className={`save-button ${!hasChanges() ? 'save-button--disabled' : ''}`}*/}
+                            {/*        disabled={!hasChanges()}*/}
+                            {/*    >*/}
+                            {/*        Сохранить*/}
+                            {/*    </button>*/}
+                            {/*</div>*/}
                         </form>
-                        ) : (
+                    ) : (
                         <div>Загрузка данных...</div>
-                        )}
+                    )}
                 </div>
             </div>
         </Portal>
 
-    // Окно подтверждения
+            {/*Окно подтверждения сохранения изменений*/}
             <ConfirmModal
                 isOpen={showConfirm}
                 onClose={handleCancelConfirm}
                 onConfirm={handleConfirmSave}
+                onSuccess={handleSuccess}
                 title="Подтверждение сохранения"
                 message="Вы уверены, что хотите сохранить изменения данных сотрудника?"
                 confirmText="Сохранить"
                 cancelText="Отмена"
+                showSuccess={true}
+            />
+            {/*Подтверждение удаления*/}
+            <ConfirmModal
+                isOpen={showDeleteConfirm}
+                onClose={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                title="Удалить сотрудника"
+                message="Вы уверены, что хотите удалить этого сотрудника? Это действие нельзя отменить."
+                confirmText="Удалить"
+                cancelText="Отмена"
+                confirmType="danger"
             />
         </>
     );
