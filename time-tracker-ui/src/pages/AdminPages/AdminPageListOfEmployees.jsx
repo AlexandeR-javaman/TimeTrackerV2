@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import CustomTable from '../../components/CustomTable';
 import EditEmployeeModal from '../../components/EditEmployeeModal';
-import {fetchEmployees, updateEmployee} from '../../api/employeesApi';
+import {fetchEmployees, updateEmployee, deleteEmployee} from '../../api/employeesApi';
 import { exportTableToCSV } from '../../utils/ExportUtils';
 
 const AdminPageListOfEmployees = () => {
@@ -38,8 +38,16 @@ const AdminPageListOfEmployees = () => {
         // }
 
         await updateEmployee(id, updatedData);
-        // setIsModalOpen(false);
-        // setSelectedEmployee(null);
+
+        // Обновляем таблицу после сохранения
+        if (tableRef.current && tableRef.current.refresh) {
+            tableRef.current.refresh();
+        }
+    };
+
+    // Функция для удаления
+    const handleDeleteEmployee = async (id, updatedData) => {
+        await deleteEmployee(id);
 
         // Обновляем таблицу после сохранения
         if (tableRef.current && tableRef.current.refresh) {
@@ -103,6 +111,7 @@ const AdminPageListOfEmployees = () => {
                     onClose={handleCloseModal}
                     employee={selectedEmployee}
                     onSave={handleSaveEmployee}
+                    onDelete={handleDeleteEmployee}
                 />
             </div>
         </>

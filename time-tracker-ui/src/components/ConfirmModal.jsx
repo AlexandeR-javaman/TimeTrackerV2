@@ -72,6 +72,7 @@ const ConfirmModal = ({
 
     return (
         <Portal>
+            {/* другой вариант обработки пустых кликов*/}
             <div className="confirm-overlay" onClick={handleClose}>
                 <div className="confirm-modal" onClick={e => e.stopPropagation()}>
                     <div className="confirm-header">
@@ -81,7 +82,7 @@ const ConfirmModal = ({
                         {/* Сообщение об успехе */}
                         {success && (
                             <div className="confirm-success">
-                                ✅ Данные успешно сохранены!
+                                ✅ Все прошло успешно!
                             </div>
                         )}
                         {/* Обычное сообщение */}

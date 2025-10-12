@@ -101,8 +101,15 @@ const EditEmployeeModal = ({
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!hasChanges()) {
-            alert('Изменения не обнаружены');
+        // // необязательная проверка, использовал ранее, сейчас блокируется кнопка отправки
+        // if (!hasChanges()) {
+        //     alert('Изменения не обнаружены');
+        //     return;
+        // }
+
+        // Проверяем заполненность полей
+        if (!formData.surname.trim() || !formData.name.trim() || !formData.patronymic.trim() || !formData.stuffId || !formData.employeePost.trim()) {
+            alert('Заполните все поля!');
             return;
         }
 
@@ -135,10 +142,6 @@ const EditEmployeeModal = ({
     }, [formData, employee]);
 
     const handleConfirmSave = async () => {
-        // const dataToSave = {
-        //     ...formData,
-        //     stuffId: Number(formData.stuffId) // явное преобразование в число
-        // };
 
         const changes = getChangedFields();
 
@@ -154,16 +157,15 @@ const EditEmployeeModal = ({
         onClose(); // Закрываем основное модальное окно только после успеха
     };
 
-    const handleCancelConfirm = () => {
-        setShowConfirm(false);
-    };
+    const handleCancelConfirm = () => setShowConfirm(false);
 
     const handleDeleteClick = () => setShowDeleteConfirm(true);
 
-    const handleConfirmDelete = () => {
-        if (onDelete) onDelete(employee.id);
-        setShowDeleteConfirm(false);
-        onClose();
+    const handleConfirmDelete = async () => {
+        // if (onDelete) onDelete(employee.id);
+        // setShowDeleteConfirm(false);
+        // onClose();
+        await onDelete(employee.id);
     };
 
     const handleCancelDelete = () => setShowDeleteConfirm(false);
@@ -259,7 +261,6 @@ const EditEmployeeModal = ({
                                         // стандартное окно подтверждения удаления:
                                         // onClick={() => {
                                         //     if (window.confirm('Вы уверены, что хотите удалить этого тупого сотрудника?')) {
-                                        //         // тут можно вызвать отдельный проп onDelete(employee.id)
                                         //         console.log('Удаляем сотрудника с ID:', employee.id);
                                         //     }
                                         // }}
@@ -273,7 +274,7 @@ const EditEmployeeModal = ({
                                         Отмена
                                     </button>
                                     <button
-                                        type="submit"
+                                        type="submit" // триггер для onSubmit формы!
                                         className={`save-button ${!hasChanges() ? 'save-button--disabled' : ''}`}
                                         disabled={!hasChanges()}
                                     >
@@ -281,19 +282,6 @@ const EditEmployeeModal = ({
                                     </button>
                                 </div>
                             </div>
-
-                            {/*<div className="modal-actions">*/}
-                            {/*    <button type="button" onClick={onClose} className="cancel-button">*/}
-                            {/*        Отмена*/}
-                            {/*    </button>*/}
-                            {/*    <button*/}
-                            {/*        type="submit"*/}
-                            {/*        className={`save-button ${!hasChanges() ? 'save-button--disabled' : ''}`}*/}
-                            {/*        disabled={!hasChanges()}*/}
-                            {/*    >*/}
-                            {/*        Сохранить*/}
-                            {/*    </button>*/}
-                            {/*</div>*/}
                         </form>
                     ) : (
                         <div>Загрузка данных...</div>
@@ -319,11 +307,13 @@ const EditEmployeeModal = ({
                 isOpen={showDeleteConfirm}
                 onClose={handleCancelDelete}
                 onConfirm={handleConfirmDelete}
+                onSuccess={handleSuccess}
                 title="Удалить сотрудника"
                 message="Вы уверены, что хотите удалить этого сотрудника? Это действие нельзя отменить."
                 confirmText="Удалить"
                 cancelText="Отмена"
                 confirmType="danger"
+                showSuccess={true}
             />
         </>
     );

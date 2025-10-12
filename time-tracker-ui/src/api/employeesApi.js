@@ -59,6 +59,25 @@ export const updateEmployee = async (id, updatedData) => {
     }
 };
 
+export const deleteEmployee = async (id) => {
+    try {
+        const token = await getValidToken();
+        const response = await axios.delete(
+            `${API_URL}${EMPLOYEE_PATH}/api/employees/${id}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        console.log('удаляем сотрудника: ', id);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
 // export const updateEmployee = async (id, updatedData) => {
 //     try {
 //         const response = await fetch(`/api/employees/${id}`, {
