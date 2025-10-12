@@ -11,7 +11,7 @@ const ConfirmModal = ({
                           message = "Вы уверены, что хотите выполнить это действие?",
                           confirmText = "Да",
                           cancelText = "Отмена",
-                          confirmType = "default", // добавили тип (default | danger)
+                          confirmType = "default", // (default | danger)
                           autoClose = true,
                           showSuccess = false,
                       }) => {
@@ -52,8 +52,17 @@ const ConfirmModal = ({
                 if (autoClose) onClose?.();
             }
         } catch (error) {
-            console.error('Error in confirmation:', error);
-            setError(error.message || 'Произошла ошибка'); // показываем пользователю
+            console.error('Ошибка при подтверждении:', error);
+            // Вытаскиваем осмысленное сообщение
+            const apiMessage =
+                error?.response?.data?.message ||
+                error?.message ||
+                'Неизвестная ошибка при выполнении операции.';
+            // показываем пользователю сообщение с ответом от бека
+            setError(apiMessage);
+            // показываем пользователю просто сообщение об ошибке
+            // setError(error.message || 'Произошла ошибка');
+
         } finally {
             setIsLoading(false);
         }
@@ -68,6 +77,11 @@ const ConfirmModal = ({
     const handleClose = () => {
         setError(null); // очищаем ошибку при закрытии
         onClose?.();
+    };
+
+    const handleRetry = async () => {
+        setError(null);
+        await handleConfirm(); // повторяем запрос
     };
 
     return (
@@ -90,12 +104,28 @@ const ConfirmModal = ({
                         {/* Сообщение об ошибке */}
                         {error && (
                             <div className="confirm-error">
-                                Что-то пошло совсем не так: {error}
+                                {/* Ошибка с простым сообщением */}
+                                {/* ⚠️ Что-то пошло совсем не так: {error} */}
+
+                                {/* Ошибка с реальным сообщением от API */}
+                                ⚠️ {error}
                             </div>
                         )}
                     </div>
                     <div className="confirm-actions">
-                        {!success && (
+                        {/* Если произошла ошибка — показываем кнопку "Повторить" */}
+                        {error && !success && (
+                            <>
+                                <button onClick={onClose} className="confirm-cancel">
+                                    {cancelText}
+                                </button>
+                                <button onClick={handleRetry} className="confirm-ok">
+                                    Повторить попытку
+                                </button>
+                            </>
+                        )}
+                        {/* Если нет ошибки — обычные кнопки подтверждения */}
+                        {!error && !success && (
                             <>
                                 <button onClick={handleClose} className="confirm-cancel" disabled={isLoading}>
                                     {cancelText}
@@ -109,6 +139,7 @@ const ConfirmModal = ({
                                 </button>
                             </>
                         )}
+                        {/* После успеха — кнопка "Понятно" */}
                         {success && (
                             <button
                                 onClick={handleImmediateClose}
