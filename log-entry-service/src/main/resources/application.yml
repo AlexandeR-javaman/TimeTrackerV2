@@ -38,3 +38,8 @@ server:
 
 integration:
   employee-url: ${EMPLOYEE_URI:http://localhost:8081}
+
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    message-topic: demo-message-topic
