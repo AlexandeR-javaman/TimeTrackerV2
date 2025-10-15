@@ -10,6 +10,7 @@ export const getEmployeeFullNamesMap = async () => {
             const fullName = `${employee.surname} ${employee.name} ${employee.patronymic}`.trim();
             fullNameMap.set(employee.stuffId, fullName);
         });
+        console.log('чего мы намапили:', fullNameMap);
 
         return fullNameMap;
     } catch (error) {
