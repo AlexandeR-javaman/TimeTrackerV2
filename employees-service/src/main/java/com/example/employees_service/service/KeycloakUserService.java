@@ -35,7 +35,7 @@ public class KeycloakUserService {
         user.setEnabled(true);
         user.setCredentials(Collections.singletonList(credential));
 
-        // Отправляем запрос на создание
+        // Отправляю запрос на создание
         Response response = keycloak.realm(realm)
                 .users()
                 .create(user);
@@ -44,16 +44,16 @@ public class KeycloakUserService {
             throw new RuntimeException("Не удалось создать пользователя в Keycloak, статус: " + response.getStatus());
         }
 
-        // Получаем ID созданного пользователя из заголовка Location
+        // Получаю ID созданного пользователя из заголовка Location
         String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
 
-        // Получаем роль из realm
+        // Получаю роль из realm
         RoleRepresentation role = keycloak.realm(realm)
                 .roles()
                 .get(roleName)
                 .toRepresentation();
 
-        // Назначаем роль пользователю
+        // Назначаю роль пользователю
         keycloak.realm(realm)
                 .users()
                 .get(userId)
@@ -61,5 +61,19 @@ public class KeycloakUserService {
                 .realmLevel()
                 .add(Collections.singletonList(role));
     return userId;
+    }
+
+    public void deleteUser(String userId) {
+        try {
+            Response response = keycloak.realm(realm)
+                    .users()
+                    .delete(userId);
+
+            if (response.getStatus() != 204) {
+                throw new RuntimeException("Не удалось удалить пользователя из Keycloak, статус: " + response.getStatus());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при удалении пользователя из Keycloak: " + e.getMessage(), e);
+        }
     }
 }

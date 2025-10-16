@@ -5,7 +5,7 @@ import {handleApiError, withErrorHandling} from '../utils/apiErrorHandler'; // �
 const API_URL = process.env.REACT_APP_API_GATEWAY_BASE_URL;
 const EMPLOYEE_PATH = process.env.REACT_APP_EMPLOYEE_PATH;
 
-// Фатальная проверка при импорте модуля
+// мощная проверка при импорте модуля
 if (!API_URL || !EMPLOYEE_PATH) {
     const missingVars = [];
     if (!API_URL) missingVars.push('REACT_APP_API_GATEWAY_BASE_URL');

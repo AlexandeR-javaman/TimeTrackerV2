@@ -81,14 +81,14 @@ public class EmployeeService {
 //    }
 
     public EmployeeDto save(EmployeeCreateDto dto) {
-        // 👇 Добавляем в Keycloak
+        // Добавляем в Keycloak
         String userId = keycloakUserService.createUser(
                 dto.getLogin(),
                 dto.getPassword(),
                 dto.getRole().replace("ROLE_", "") // убираем префикс
         );
 
-        // 👇 Сохраняем в свою БД (если нужно)
+        // Сохраняю в свою БД
         Employee employee = Employee.builder()
                 .surname(dto.getSurname())
                 .name(dto.getName())
@@ -146,10 +146,25 @@ public class EmployeeService {
     }
 
     public boolean deleteById(Long id) {
-        if (employeeRepository.existsById(id)) {
+
+        Optional<Employee> employeeOpt = employeeRepository.findById(id);
+
+        if (employeeOpt.isPresent()) {
+            Employee employee = employeeOpt.get();
+
+            // удаляем пользователя из Keycloak
+            if (employee.getKeycloakId() != null) {
+                keycloakUserService.deleteUser(employee.getKeycloakId());
+            }
+
+            // удаляем из базы данных
             employeeRepository.deleteById(id);
             return true;
         }
+//        if (employeeRepository.existsById(id)) {
+//            employeeRepository.deleteById(id);
+//            return true;
+//        }
         return false;
     }
 
