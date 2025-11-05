@@ -1,5 +1,6 @@
 package com.example.mailsender.service;
 
+import com.example.mailsender.Integration.EmployeesClient;
 import com.example.mailsender.config.MailConfig;
 import com.example.mailsender.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +14,22 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final MailConfig config;
+    private final EmployeesClient employeesClient;
 
     void sendNeedCloseEntryMail(MessageDto messageDto) {
-        System.out.println("Сообщение отправлено на емэйл " + messageDto.text());
+        System.out.println("Сообщение отправлено на емэйл " + " с текстом " + messageDto.keycloakId());
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(messageDto.email());
         mail.setSubject("Важное письмо от работодателя");
-        mail.setText(messageDto.text());
+        mail.setText(messageDto.keycloakId());
         mail.setFrom(config.getUsername());
-        mailSender.send(mail);
+
+        var employee = employeesClient.getEmployeeById(messageDto.keycloakId());
+        System.out.println("Сообщение отправлено пользователю " + employee.getSurname());
+//        mail.setTo(employee.getEmail());
+        //        mailSender.send(mail);
     }
 
     void sendNeedOpenEntryMail(MessageDto messageDto) {
-        System.out.println("Сообщение второе должно быть отправлено на емэйл " + messageDto.text());
+        System.out.println("Сообщение второе должно быть отправлено на емэйл " + messageDto.keycloakId());
     }
 }

@@ -13,10 +13,18 @@ public class MessageProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${kafka.topic.need-close-entry-topic}")
-    private String topic;
+    private String needCloseTopic;
 
-    public void send(MessageDto message) {
-        kafkaTemplate.send(topic, message);
-        System.out.println("✅ Sent to Kafka: " + message.text());
+    @Value("${kafka.topic.need-open-entry-topic}")
+    private String needOpenTopic;
+
+    public void sendNeedClose(MessageDto message) {
+        kafkaTemplate.send(needCloseTopic, message);
+//        System.out.println("✅ Sent to Kafka: " + message.text());
+    }
+
+    public void sendNeedOpen(MessageDto message) {
+        kafkaTemplate.send(needOpenTopic, message);
+//        System.out.println("✅ Sent to Kafka: " + message.text());
     }
 }

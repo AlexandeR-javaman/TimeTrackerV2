@@ -45,4 +45,7 @@ public class Employee {
     @Column(name = "keycloak_id", nullable = false)
     private String keycloakId;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
 }

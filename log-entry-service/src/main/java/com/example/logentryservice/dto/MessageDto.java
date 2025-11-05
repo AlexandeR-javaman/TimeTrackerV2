@@ -1,4 +1,4 @@
 package com.example.logentryservice.dto;
 
-public record MessageDto(String email, String text) {
+public record MessageDto(String keycloakId) {
 }
