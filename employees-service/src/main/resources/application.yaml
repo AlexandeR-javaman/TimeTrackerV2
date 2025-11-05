@@ -31,13 +31,6 @@ keycloak:
   password: realmclient
 
 
-kafka:
-  bootstrap-servers: localhost:9092
-  topic:
-    message-topic: demo-message-topic
-
-
-
 #logging:
 #  level:
 #    root: info

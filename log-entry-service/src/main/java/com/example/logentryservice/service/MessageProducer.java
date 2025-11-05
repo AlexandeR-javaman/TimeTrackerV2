@@ -12,11 +12,11 @@ public class MessageProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    @Value("${kafka.topic.message-topic}")
+    @Value("${kafka.topic.need-close-entry-topic}")
     private String topic;
 
     public void send(MessageDto message) {
         kafkaTemplate.send(topic, message);
-        System.out.println("✅ Sent to Kafka: " + message.getText());
+        System.out.println("✅ Sent to Kafka: " + message.text());
     }
 }

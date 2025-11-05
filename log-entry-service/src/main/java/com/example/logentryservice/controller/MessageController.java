@@ -17,13 +17,13 @@ public class MessageController {
 
     @GetMapping("/send")
     public String sendMessage() {
-        producer.send(new MessageDto("Hello from sender-service!"));
+        producer.send(new MessageDto("test-employee1@rambler.ru", "Текст сообщения в кафку"));
         return "Message sent to Kafka!";
     }
     @PostMapping("/send")
     public String sendMessagePost(@RequestBody MessageDto message) {
         producer.send(message);
-        return "Message sent to Kafka: " + message.getText();
+        return "Message sent to Kafka: " + message.text();
     }
 }
 

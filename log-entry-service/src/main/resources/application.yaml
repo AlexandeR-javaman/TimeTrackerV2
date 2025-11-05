@@ -42,4 +42,5 @@ integration:
 kafka:
   bootstrap-servers: localhost:9092
   topic:
-    message-topic: demo-message-topic
+    need-close-entry-topic: need-close
+    need-open-entry-topic: need-open
