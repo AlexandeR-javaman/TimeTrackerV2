@@ -23,7 +23,7 @@ public class EmailService {
         var employee = employeesClient.getEmployeeById(messageDto.keycloakId());
         SimpleMailMessage mail = getMailMessage(employee, "Вы забыли завершить смену");
         //      Раскомментировать для реальной отправки письма:
-        mailSender.send(mail);
+//        mailSender.send(mail);
 
         log.info("Сообщение отправлено пользователю {} на емэйл {} с текстом: \" {} \"",
                 employee.getSurname(), employee.getEmail(), mail.getText());
@@ -33,7 +33,7 @@ public class EmailService {
         var employee = employeesClient.getEmployeeById(messageDto.keycloakId());
         SimpleMailMessage mail = getMailMessage(employee, "Вы забыли начать смену");
         //      Раскомментировать для реальной отправки письма:
-        mailSender.send(mail);
+//        mailSender.send(mail);
 
         log.info("Сообщение отправлено пользователю {} на емэйл {} с текстом: \" {} \"",
                 employee.getSurname(), employee.getEmail(), mail.getText());
