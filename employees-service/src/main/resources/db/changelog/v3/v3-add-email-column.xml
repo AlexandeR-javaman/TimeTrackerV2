@@ -8,6 +8,7 @@
     <changeSet id="v3-add-email-column" author="A_Kazakov">
         <addColumn tableName="employees">
             <column name="email" type="varchar(255)"/>
+<!--            <column name="email" type="varchar(255)" defaultValue="test-employee1@rambler.ru"/>-->
         </addColumn>
     </changeSet>
 

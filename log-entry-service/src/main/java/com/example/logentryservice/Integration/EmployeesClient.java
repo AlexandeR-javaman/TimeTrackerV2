@@ -1,10 +1,14 @@
 package com.example.logentryservice.Integration;
 
+import com.example.logentryservice.dto.EmployeeDto;
 import com.example.logentryservice.dto.EmployeeIDDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class EmployeesClient {
@@ -30,4 +34,34 @@ public class EmployeesClient {
                 })
                 .body(EmployeeIDDto.class);
     }
+
+    public List<EmployeeDto> getAllEmployees() {
+        EmployeeDto[] employeesArray = restClient.get()
+                .uri("/api/employees")
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
+                    throw new RuntimeException("Employees not found");
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
+                    throw new RuntimeException("Server error in EmployeesClient");
+                })
+                .body(EmployeeDto[].class);
+
+        return Arrays.asList(employeesArray);
+    }
+
+//    public List<EmployeeDto> getAllEmployees() {
+//        return restClient.get()
+//                .uri("/api/employees")
+//                .retrieve()
+//                .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
+//                    throw new RuntimeException("id not found");
+//                })
+//                .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
+//                    throw new RuntimeException("Server error in EmployeesClient ");
+//                })
+//                .bodyToFlux(EmployeeDto.class)
+//                .collectList()
+//                .block();
+//    }
 }

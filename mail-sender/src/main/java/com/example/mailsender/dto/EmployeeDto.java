@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 public class EmployeeDto {
 
-    private Long id;
+//    private Long id;
 
     private String surname;
 
@@ -21,17 +21,17 @@ public class EmployeeDto {
 
     private String patronymic;
 
-    private Long stuffId;
-
-    private String employeePost;
-
-    private String role;
-
-//    private String login;
+//    private Long stuffId;
 //
-//    private String keycloakId;
-
-    private LocalDate date;
+//    private String employeePost;
+//
+//    private String role;
+//
+////    private String login;
+////
+////    private String keycloakId;
+//
+//    private LocalDate date;
 
     private String email;
 }

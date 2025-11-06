@@ -13,6 +13,10 @@ spring:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true
       mail.smtp.starttls.enable: false
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: true
 server:
   port: 8083
 
@@ -24,6 +28,10 @@ kafka:
 
 integration:
   employee-url: ${EMPLOYEE_URI:http://localhost:8081}
+
+logging:
+  charset:
+    console: UTF-8
 
 
 

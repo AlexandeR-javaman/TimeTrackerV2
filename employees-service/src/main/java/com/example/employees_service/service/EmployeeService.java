@@ -34,6 +34,7 @@ public class EmployeeService {
                         .employeePost(employee.getEmployeePost())
                         .role(employee.getRole())
                         .date(LocalDate.now())
+                        .keycloakId(employee.getKeycloakId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -50,6 +51,7 @@ public class EmployeeService {
                         .stuffId(employee.getStuffId())
                         .employeePost(employee.getEmployeePost())
                         .role(employee.getRole())
+                        .email(employee.getEmail())
                         .date(LocalDate.now())
                         .build());
     }

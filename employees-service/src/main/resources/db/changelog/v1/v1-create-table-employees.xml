@@ -37,7 +37,7 @@
         </createTable>
 <!--        <insert tableName="employee">-->
 <!--            <column name="age" value="10"/>-->
-<!--            <column name="name" value="Рогоев"/>-->
+<!--            <column name="name" value="Иванов"/>-->
 <!--        </insert>-->
     </changeSet>
 

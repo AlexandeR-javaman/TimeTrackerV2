@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MessageListener {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final EmailService emailService;
 
     @KafkaListener(topics = "${kafka.topic.need-close-entry-topic}",
