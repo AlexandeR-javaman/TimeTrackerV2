@@ -64,7 +64,7 @@
 			<artifactId>keycloak-admin-client</artifactId>
 			<version>26.0.5</version>
 		</dependency>
-	</dependencies>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>

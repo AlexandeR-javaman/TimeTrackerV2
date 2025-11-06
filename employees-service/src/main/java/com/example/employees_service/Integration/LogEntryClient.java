@@ -3,7 +3,6 @@ package com.example.employees_service.Integration;
 import com.example.employees_service.dto.LogEntryDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class LogEntryClient {

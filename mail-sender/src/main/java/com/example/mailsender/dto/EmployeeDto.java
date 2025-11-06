@@ -1,4 +1,4 @@
-package com.example.employees_service.dto;
+package com.example.mailsender.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +27,7 @@ public class EmployeeDto {
 
     private String role;
 
-//    private String login;
+    //    private String login;
 //
     private String keycloakId;
 

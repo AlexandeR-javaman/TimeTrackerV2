@@ -38,3 +38,17 @@ server:
 
 integration:
   employee-url: ${EMPLOYEE_URI:http://localhost:8081}
+
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    need-close-entry-topic: need-close
+    need-open-entry-topic: need-open
+
+scheduler:
+  need-close-cron: 0/10 * * * * 5
+  need-open-cron: 0/10 * * * * *
+
+logging:
+  charset:
+    console: UTF-8

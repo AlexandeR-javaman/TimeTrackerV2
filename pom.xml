@@ -24,5 +24,6 @@
         <module>employees-service</module>
         <module>log-entry-service</module>
         <module>api-gateway</module>
+        <module>mail-sender</module>
     </modules>
 </project>
