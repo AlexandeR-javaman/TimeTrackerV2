@@ -1,5 +1,6 @@
 package com.example.mailsender.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +32,8 @@ public class EmployeeDto {
 //
     private String keycloakId;
 
-//    private LocalDate date;
+    @JsonIgnore
+    private LocalDate date;
 
     private String email;
 }

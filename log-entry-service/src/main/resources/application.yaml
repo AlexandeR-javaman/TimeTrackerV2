@@ -46,7 +46,7 @@ kafka:
     need-open-entry-topic: need-open
 
 scheduler:
-  need-close-cron: 0/10 * * * * 5
+  need-close-cron: 0/10 * * * * *
   need-open-cron: 0/10 * * * * *
 
 logging:
