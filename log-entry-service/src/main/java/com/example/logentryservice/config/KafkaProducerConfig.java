@@ -20,6 +20,11 @@ public class KafkaProducerConfig {
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        System.out.println("=== KAFKA BOOTSTRAP SERVERS: " + bootstrapServers + " ===");
+    }
+
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> config = new HashMap<>();

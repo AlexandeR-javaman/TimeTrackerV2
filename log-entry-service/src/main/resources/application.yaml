@@ -33,6 +33,9 @@ spring:
     swagger-ui:
       url: /v3/api-docs
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+
 server:
   port: 8082
 
@@ -40,7 +43,7 @@ integration:
   employee-url: ${EMPLOYEE_URI:http://localhost:8081}
 
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
   topic:
     need-close-entry-topic: need-close
     need-open-entry-topic: need-open

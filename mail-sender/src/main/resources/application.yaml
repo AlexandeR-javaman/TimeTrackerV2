@@ -14,6 +14,7 @@ spring:
       mail.smtp.ssl.enable: true
       mail.smtp.starttls.enable: false
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
     consumer:
       auto-offset-reset: earliest
       enable-auto-commit: true
@@ -21,7 +22,6 @@ server:
   port: 8083
 
 kafka:
-  bootstrap-servers: localhost:9092
   topic:
     need-close-entry-topic: need-close
     need-open-entry-topic: need-open

@@ -15,6 +15,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
 
   keycloak:
@@ -28,57 +29,72 @@ services:
       KC_HTTP_ENABLED: true
       KC_HOSTNAME: localhost
       KC_HOSTNAME_STRICT: false
+      # Добавляем для стабильности
+      KC_DB: dev-file
+      JAVA_OPTS: "-Xms512m -Xmx1024m"
     volumes:
       - './config/keycloak/import:/opt/keycloak/data/import'
     command: start-dev --import-realm
     #    чтобы не падала кафка
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ready" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      test: ["CMD-SHELL", "echo > /dev/tcp/localhost/8080"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+    restart: unless-stopped
 
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 #     чтобы не падала кафка
       ZOOKEEPER_TICK_TIME: 2000
     healthcheck:
-      test: [ "CMD", "zkCli.sh", "-server", "localhost:2181", "stat" ]
+      test: [ "CMD-SHELL", "echo stat | nc localhost 2181 || exit 1" ]
       interval: 10s
-      timeout: 5s
+      timeout: 10s
       retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
 
   kafka:
     image: confluentinc/cp-kafka:7.3.0
     ports:
       - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      zookeeper:
+        condition: service_healthy
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  # чтобы не падала кафка
+      # чтобы не падала кафка
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       # Увеличиваем таймауты для устойчивости
       KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 60000
       KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 60000
-        # Добавляем ретеншн для логов
-      KAFKA_LOG_RETENTION_HOURS: 168
-      KAFKA_LOG_SEGMENT_BYTES: 1073741824
-      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
+#        # Добавляем ретеншн для логов
+#      KAFKA_LOG_RETENTION_HOURS: 168
+#      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+#      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
       interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    restart: on-failure  #автоматический перезапуск при падении
-
+      timeout: 20s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped  #автоматический перезапуск при падении
 
 #Раскомментировать для запуска в контейнере:
   employees-service:
@@ -102,7 +118,7 @@ services:
       - AUTH_SERVER_URL=http://keycloak:8080
       # Добавляем настройки Kafka для сервиса
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    restart: on-failure
+    restart: unless-stopped
 
   log-entry-service:
     container_name: LogEntries
@@ -126,7 +142,7 @@ services:
       - EMPLOYEE_URI=http://Employees:8081
       # Добавляем настройки Kafka для сервиса
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    restart: on-failure
+    restart: unless-stopped
 
   api-gateway:
     container_name: ApiGateway
@@ -147,7 +163,7 @@ services:
       - LOG_ENTRY_SERVICE_URI=http://LogEntries:8082
     extra_hosts:
       - "localhost:host-gateway"
-    restart: on-failure
+    restart: unless-stopped
 
   mail-sender:
     container_name: MailSender
