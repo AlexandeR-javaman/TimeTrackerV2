@@ -30,7 +30,9 @@ public class LogEntryScheduler {
         log.info("Scheduler оповещающий о незавершенных сменах начал работу");
         List<LogEntry> openEntries = logEntryRepository.findByEndTimeIsNull();
         openEntries.forEach(entry -> {
-            System.out.println("KeycloakId(): " + entry.getKeycloakId());
+            System.out.println("Не завершена смена для сотрудника: " + entry.getEmployeeId());
+//            либо
+//            System.out.println("Не завершена смена для сотрудника: " + entry.getKeycloakId());
             producer.sendNeedClose(new MessageDto(entry.getKeycloakId()));
         });
     }
@@ -40,7 +42,7 @@ public class LogEntryScheduler {
         log.info("Scheduler оповещающий о неначатых сменах начал работу");
         List<EmployeeDto> employees = employeesClient.getAllEmployees().stream()
                 .filter(e -> !"ROLE_ADMIN".equalsIgnoreCase(e.getRole()))
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
         if (employees.isEmpty()) return;
 
         LocalDateTime shiftStart = LocalDateTime.now().with(LocalTime.MIN);
