@@ -9,6 +9,12 @@ services:
       - POSTGRES_USER=postgres1
       - POSTGRES_PASSWORD=postgres1
       - POSTGRES_DB=TestDBInContainer
+#    чтобы не падала кафка
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres1 -d TestDBInContainer" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 
   keycloak:
@@ -25,12 +31,26 @@ services:
     volumes:
       - './config/keycloak/import:/opt/keycloak/data/import'
     command: start-dev --import-realm
+    #    чтобы не падала кафка
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ready" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+#     чтобы не падала кафка
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      test: [ "CMD", "zkCli.sh", "-server", "localhost:2181", "stat" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
   kafka:
     image: confluentinc/cp-kafka:7.3.0
@@ -41,65 +61,123 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  # чтобы не падала кафка
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      # Увеличиваем таймауты для устойчивости
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 60000
+      KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 60000
+        # Добавляем ретеншн для логов
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: on-failure  #автоматический перезапуск при падении
 
 
+#Раскомментировать для запуска в контейнере:
+  employees-service:
+    container_name: Employees
+    build:
+      context: ./employees-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgresDb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    environment:
+      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
+      - USER_DB=postgres1
+      - PASSWORD_DB=postgres1
+      - AUTH_SERVER_URL=http://keycloak:8080
+      # Добавляем настройки Kafka для сервиса
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    restart: on-failure
 
-
-
-##Раскомментировать для запуска в контейнере:
-#  employees-service:
-#    container_name: Employees
+  log-entry-service:
+    container_name: LogEntries
+    build:
+      context: ./log-entry-service
+      dockerfile: Dockerfile
 #    build:
-#      context: ./employees-service
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - postgresDb
-#    environment:
-#      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
-#      - USER_DB=postgres1
-#      - PASSWORD_DB=postgres1
-#      - AUTH_SERVER_URL=http://keycloak:8080
-#
-#  log-entry-service:
-#    container_name: LogEntries
-#    build:
-#      context: ./log-entry-service
-#      dockerfile: Dockerfile
-##    build:
-##      context: .
-##      dockerfile: log-entry-service/Dockerfile
-#    ports:
-#      - "8082:8082"
-#    depends_on:
-#      - postgresDb
-#    environment:
-#      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
-#      - USER_DB=postgres1
-#      - PASSWORD_DB=postgres1
-#      - EMPLOYEE_URI=http://Employees:8081
-#
-#  api-gateway:
-#    container_name: ApiGateway
-#    build:
-#      context: ./api-gateway
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8090:8090"
-#    environment:
-#      - FRONTEND_URI=http://localhost:3000
-#      - KEYCLOAK_URI=http://localhost:8080/realms/Employees_realm
-#      - EMPLOYEES_SERVICE_URI=http://Employees:8081
-#      - LOG_ENTRY_SERVICE_URI=http://LogEntries:8082
-#    extra_hosts:
-#      - "localhost:host-gateway"
-#
-#  frontend:
-#    container_name: Frontend
-#    build:
-#      context: ./time-tracker-ui
-#      dockerfile: Dockerfile
-#    ports:
-#      - "3000:80"
+#      context: .
+#      dockerfile: log-entry-service/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgresDb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      - DB_URL=jdbc:postgresql://postgresDb:5432/TestDBInContainer
+      - USER_DB=postgres1
+      - PASSWORD_DB=postgres1
+      - EMPLOYEE_URI=http://Employees:8081
+      # Добавляем настройки Kafka для сервиса
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    restart: on-failure
+
+  api-gateway:
+    container_name: ApiGateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    depends_on:
+      employees-service:
+        condition: service_started
+      log-entry-service:
+        condition: service_started
+    environment:
+      - FRONTEND_URI=http://localhost:3000
+      - KEYCLOAK_URI=http://localhost:8080/realms/Employees_realm
+      - EMPLOYEES_SERVICE_URI=http://Employees:8081
+      - LOG_ENTRY_SERVICE_URI=http://LogEntries:8082
+    extra_hosts:
+      - "localhost:host-gateway"
+    restart: on-failure
+
+  mail-sender:
+    container_name: MailSender
+    build:
+      context: ./mail-sender
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      employees-service:
+        condition: service_started
+    environment:
+      - EMPLOYEE_URI=http://Employees:8081
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_MAIL_HOST=smtp.mail.ru
+      - SPRING_MAIL_PORT=465
+      - SPRING_MAIL_USERNAME=test-employee2@mail.ru
+      - SPRING_MAIL_PASSWORD=CHANGE_PASSWORD
+    restart: on-failure
+
+  frontend:
+    container_name: Frontend
+    build:
+      context: ./time-tracker-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      api-gateway:
+        condition: service_started
 
