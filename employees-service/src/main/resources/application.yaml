@@ -30,6 +30,9 @@ keycloak:
   userName: realmclient
   password: realmclient
 
+log-entry-service:
+  url: http://localhost:8082
+
 logging:
   charset:
     console: UTF-8

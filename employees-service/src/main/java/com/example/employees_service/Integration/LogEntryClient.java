@@ -10,7 +10,7 @@ public class LogEntryClient {
     private final RestClient restClient;
 
     public LogEntryClient(RestClient.Builder builder,
-                          @Value("${log-entry-service.url}") String baseUrl) {
+                          @Value("${log-entry-service.url:http://localhost:8080}") String baseUrl) {
         this.restClient = builder
                 .baseUrl(baseUrl)
                 .build();
