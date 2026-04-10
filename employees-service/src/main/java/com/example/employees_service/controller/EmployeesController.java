@@ -52,13 +52,13 @@ public class EmployeesController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeUpdateDto updateEmployeeDto,
-                                                      @PathVariable Long id) {
+                                                      @PathVariable("id") Long id) {
         EmployeeDto updatedEmployee = employeeService.update(updateEmployeeDto, id);
         return updatedEmployee != null ? ResponseEntity.status(HttpStatus.OK).body(updatedEmployee) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
         return employeeService.deleteById(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
