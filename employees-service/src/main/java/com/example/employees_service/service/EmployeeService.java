@@ -40,8 +40,6 @@ public class EmployeeService {
     }
 
     public Optional<EmployeeDto> findById(String keycloak_id) {
-//        return employeesRepository.findById(id)       // если надо через маппер
-//                .map(employeesMapper::entityToDto);  // если надо через маппер
         return employeeRepository.findByKeycloakId(keycloak_id)
                 .map(employee -> EmployeeDto.builder()
                         .id(employee.getId())
@@ -52,6 +50,7 @@ public class EmployeeService {
                         .employeePost(employee.getEmployeePost())
                         .role(employee.getRole())
                         .email(employee.getEmail())
+                        .keycloakId(employee.getKeycloakId())
                         .date(LocalDate.now())
                         .build());
     }
@@ -100,6 +99,7 @@ public class EmployeeService {
                 .role(dto.getRole())
                 .login(dto.getLogin())
                 .keycloakId(userId)
+                .email(dto.getLogin() + "@test.com") // генерируем email из login
                 .build();
 
         Employee saved = employeeRepository.save(employee);
@@ -112,6 +112,8 @@ public class EmployeeService {
                 .stuffId(saved.getStuffId())
                 .employeePost(saved.getEmployeePost())
                 .role(saved.getRole())
+                .keycloakId(saved.getKeycloakId())
+                .email(saved.getEmail())
                 .date(LocalDate.now())
                 .build();
     }
@@ -143,6 +145,8 @@ public class EmployeeService {
                 .stuffId(employee.getStuffId())
                 .employeePost(employee.getEmployeePost())
                 .role(employee.getRole())
+                .keycloakId(employee.getKeycloakId())
+                .email(employee.getEmail())
                 .date(LocalDate.now())
                 .build();
     }
