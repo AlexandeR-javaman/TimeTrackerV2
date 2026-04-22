@@ -21,33 +21,36 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE) // Фильтр сработает первым
-    public WebFilter corsFilter() {
-        return (ServerWebExchange ctx, WebFilterChain chain) -> {
-            System.out.println("CORS FILTER TRIGGERED!"); // Логируем вызов
-            ServerHttpRequest request = ctx.getRequest();
-            if (CorsUtils.isCorsRequest(request)) {
-                ServerHttpResponse response = ctx.getResponse();
-                HttpHeaders headers = response.getHeaders();
-                headers.add("Access-Control-Allow-Origin", "http://localhost:3000");
-
-                // для проверки фронта методы PUT, PATCH, DELETE убраны
-//                headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-                // рабочий код со всеми методами
-                headers.add("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE, OPTIONS");
-
-                headers.add("Access-Control-Max-Age", "3600");
-                headers.add("Access-Control-Allow-Headers", "*");
-                headers.add("Access-Control-Allow-Credentials", "true");
-                if (request.getMethod() == HttpMethod.OPTIONS) {
-                    response.setStatusCode(HttpStatus.OK);
-                    return Mono.empty();
-                }
-            }
-            return chain.filter(ctx);
-        };
-    }
+//    @Value("${cors.allowed-origin}")
+//    private String allowedOrigin;
+//
+//    @Bean
+//    @Order(Ordered.HIGHEST_PRECEDENCE) // Фильтр сработает первым
+//    public WebFilter corsFilter() {
+//        return (ServerWebExchange ctx, WebFilterChain chain) -> {
+//            System.out.println("CORS FILTER TRIGGERED!"); // Логируем вызов
+//            ServerHttpRequest request = ctx.getRequest();
+//            if (CorsUtils.isCorsRequest(request)) {
+//                ServerHttpResponse response = ctx.getResponse();
+//                HttpHeaders headers = response.getHeaders();
+//                headers.add("Access-Control-Allow-Origin", allowedOrigin);
+//
+//                // для проверки фронта методы PUT, PATCH, DELETE убраны
+////                headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+//                // рабочий код со всеми методами
+//                headers.add("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE, OPTIONS");
+//
+//                headers.add("Access-Control-Max-Age", "3600");
+//                headers.add("Access-Control-Allow-Headers", "*");
+//                headers.add("Access-Control-Allow-Credentials", "true");
+//                if (request.getMethod() == HttpMethod.OPTIONS) {
+//                    response.setStatusCode(HttpStatus.OK);
+//                    return Mono.empty();
+//                }
+//            }
+//            return chain.filter(ctx);
+//        };
+//    }
 
 
     @Bean
@@ -61,7 +64,8 @@ public class SecurityConfig {
 //если авторизацию надо добавить
         return http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable()) // Отключаем дефолтный CORS от Spring Security
+//
+//                .cors(cors -> cors.disable()) // Отключаем дефолтный CORS от Spring Security
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()

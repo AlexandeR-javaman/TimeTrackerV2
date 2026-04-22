@@ -1,1 +1,9 @@
-/.idea/
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Build outputs
+target/
+/time-tracker-ui/node_modules/
+/.env
