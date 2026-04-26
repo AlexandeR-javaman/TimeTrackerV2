@@ -3,8 +3,8 @@ services:
   postgresDb:
     container_name: PostgresDBContainer
     image: postgres:17.9-alpine
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres1
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -28,10 +28,15 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KC_HTTP_ENABLED: true
       KC_HOSTNAME: ${HOST_IP}
+      KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HTTPS_REQUIRED: false
+#      KC_PROXY: edge
       # Добавляем для стабильности
       KC_DB: dev-file
       JAVA_OPTS: "-Xms512m -Xmx1024m"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
     volumes:
       - './config/keycloak/import:/opt/keycloak/data/import'
     command: start-dev --import-realm
@@ -47,8 +52,8 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
-    ports:
-      - "2181:2181"
+#    ports:
+#      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 #     чтобы не падала кафка
@@ -64,9 +69,9 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.3.0
-    ports:
-      - "9092:9092"
-      - "29092:29092"
+#    ports:
+#      - "9092:9092"
+#      - "29092:29092"
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -99,11 +104,12 @@ services:
 #Раскомментировать для запуска в контейнере:
   employees-service:
     container_name: Employees
-    build:
-      context: ./employees-service
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8081"
+    image: alexanderjavaman/timetrackerv2:employees-service-v1
+#    build:
+#      context: ./employees-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8081:8081"
     depends_on:
       postgresDb:
         condition: service_healthy
@@ -122,14 +128,15 @@ services:
 
   log-entry-service:
     container_name: LogEntries
-    build:
-      context: ./log-entry-service
-      dockerfile: Dockerfile
+    image: alexanderjavaman/timetrackerv2:log-entry-service-v1
+#    build:
+#      context: ./log-entry-service
+#      dockerfile: Dockerfile
 #    build:
 #      context: .
 #      dockerfile: log-entry-service/Dockerfile
-    ports:
-      - "8082:8082"
+#    ports:
+#      - "8082:8082"
     depends_on:
       postgresDb:
         condition: service_healthy
@@ -146,9 +153,10 @@ services:
 
   api-gateway:
     container_name: ApiGateway
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+    image: alexanderjavaman/timetrackerv2:api-gateway-v1
+#    build:
+#      context: ./api-gateway
+#      dockerfile: Dockerfile
     ports:
       - "8090:8090"
     depends_on:
@@ -167,11 +175,12 @@ services:
 
   mail-sender:
     container_name: MailSender
-    build:
-      context: ./mail-sender
-      dockerfile: Dockerfile
-    ports:
-      - "8083:8083"
+    image: alexanderjavaman/timetrackerv2:mail-sender-v1
+#    build:
+#      context: ./mail-sender
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8083:8083"
     depends_on:
       kafka:
         condition: service_healthy
@@ -188,16 +197,17 @@ services:
 
   frontend:
     container_name: Frontend
-    build:
-      context: ./time-tracker-ui
-      dockerfile: Dockerfile
-      args:
-        - REACT_APP_API_GATEWAY_BASE_URL=http://${HOST_IP:-localhost}:8090
-        - REACT_APP_KEYCLOAK_URL=http://${HOST_IP:-localhost}:8080
-        - REACT_APP_KEYCLOAK_REALM=Employees_realm
-        - REACT_APP_KEYCLOAK_CLIENT_ID=frontend
-        - REACT_APP_LOG_ENTRY_PATH=/log_entry_service
-        - REACT_APP_EMPLOYEE_PATH=/employees_service
+    image: alexanderjavaman/timetrackerv2:frontend-v2
+#    build:
+#      context: ./time-tracker-ui
+#      dockerfile: Dockerfile
+#      args:
+#        - REACT_APP_API_GATEWAY_BASE_URL=http://${HOST_IP:-localhost}:8090
+#        - REACT_APP_KEYCLOAK_URL=http://${HOST_IP:-localhost}:8080
+#        - REACT_APP_KEYCLOAK_REALM=Employees_realm
+#        - REACT_APP_KEYCLOAK_CLIENT_ID=frontend
+#        - REACT_APP_LOG_ENTRY_PATH=/log_entry_service
+#        - REACT_APP_EMPLOYEE_PATH=/employees_service
     ports:
       - "3000:80"
     depends_on:
